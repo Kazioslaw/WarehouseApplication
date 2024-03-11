@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WarehouseApplication.Server.Data;
 
 namespace WarehouseApplication.Server
 {
@@ -6,6 +9,8 @@ namespace WarehouseApplication.Server
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			builder.Services.AddDbContext<WarehouseApplicationServerContext>(options =>
+			    options.UseSqlServer(builder.Configuration.GetConnectionString("WarehouseApplicationServerContext") ?? throw new InvalidOperationException("Connection string 'WarehouseApplicationServerContext' not found.")));
 
 			// Add services to the container.
 
