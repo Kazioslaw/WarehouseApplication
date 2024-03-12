@@ -19,6 +19,15 @@ namespace WarehouseApplication.Server
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.AddCors(
+				options=> options.AddPolicy("AllowAngularOrigins",
+				builder =>
+				{
+					builder.WithOrigins("https://localhost:4200",
+						"http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+
+				}));
+
 			var app = builder.Build();
 
 			app.UseDefaultFiles();
@@ -37,7 +46,7 @@ namespace WarehouseApplication.Server
 
 
 			app.MapControllers();
-
+			app.UseCors("AllowAngularOrigins");
 			app.MapFallbackToFile("/index.html");
 
 			app.Run();

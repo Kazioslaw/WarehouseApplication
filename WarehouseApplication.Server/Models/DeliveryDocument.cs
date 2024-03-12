@@ -7,8 +7,8 @@ namespace WarehouseApplication.Server.Models
 	{
 		[Key]
 		public int DocumentID { get; set; }
-		public bool IsApproved { get; set; }
-		public bool IsCancelled { get; set; }
+		public bool IsApproved { get; set; } = false;
+		public bool IsCancelled { get; set; } = false;
 
 		[ForeignKey(nameof(SupplierID))]
 		public int SupplierID { get; set;}
@@ -19,7 +19,7 @@ namespace WarehouseApplication.Server.Models
 		public ICollection<ProductList>? Products { get; set; }
 		
 		[ForeignKey(nameof(StorehouseID))]
-		public int StorehouseID { get; set; }
+		public int? StorehouseID { get; set; }
 		public Storehouse? Storehouse { get; set; }
 	}
 }

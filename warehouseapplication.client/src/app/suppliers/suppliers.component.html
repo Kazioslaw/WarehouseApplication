@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h2 class="align-middle caption-top">Dostawcy</h2>
+  <div>
+    <button class="btn btn-secondary">Add</button>
+  </div>
+</div>
+<table class="table align-middle mb-0 bg-white caption-top button-top" *ngIf="suppliers">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Street</th>
+      <th>City</th>
+      <th>Zipcode</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let supplier of suppliers">
+    <td>
+      {{supplier.supplierID}}
+    </td>
+    <td>
+      {{supplier.supplierName}}
+    </td>
+    <td>
+      {{supplier.supplierAddress}}
+    </td>
+    <td>
+      {{supplier.supplierCity}}
+    </td>
+    <td>
+      {{supplier.supplierZipcode}}
+    </td>
+    <td>
+      <button [routerLink]="['/']" class="btn btn-secondary"><i class="fa-solid fa-edit"></i></button>
+      <button [routerLink]="['/']" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i></button>
+    </td>
+  </tr>
+  </tbody>
+</table>

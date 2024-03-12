@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseApplication.Server.Data;
 
@@ -11,9 +12,11 @@ using WarehouseApplication.Server.Data;
 namespace WarehouseApplication.Server.Data.Migrations
 {
     [DbContext(typeof(WarehouseApplicationServerContext))]
-    partial class WarehouseApplicationServerContextModelSnapshot : ModelSnapshot
+    [Migration("20240311233444_AllowsNullsInTabels")]
+    partial class AllowsNullsInTabels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
