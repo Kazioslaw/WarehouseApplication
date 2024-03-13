@@ -1,9 +1,41 @@
-import { Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Supplier } from '../models/supplier';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SuppliersService {
-  constructor() {}
+  private apiUrl = 'https://localhost:7088/api/Suppliers';
+
+  constructor(private http: HttpClient) {}
+
+  // Create
+  createSupplier(suppliers: Supplier): Observable<Supplier> {
+    return this.http.post<Supplier>(this.apiUrl, suppliers);
+  }
+
+  // Read
+  getSuppliers(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(this.apiUrl);
+  }
+
+  // Read/ID
+  getSupplierByID(id: number): Observable<Supplier> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<Supplier>(url);
+  }
+
+  // Update
+  updateSupplier(supplier: Supplier): Observable<Supplier> {
+    const url = `${this.apiUrl}/${supplier.supplierID}`;
+    return this.http.put<Supplier>(url, supplier);
+  }
+
+  // Delete
+  deleteSupplier(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url);
+  }
 }

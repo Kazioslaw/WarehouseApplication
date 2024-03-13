@@ -1,1 +1,21 @@
-<p>edit-product works!</p>
+<h2 class="my-3">Edit product</h2>
+<form>
+    <div class="mb-3 row">
+        <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
+        <div class="col-sm-8">
+            <input type="text" title="name" value="" class="form-control" id="name">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="barcode" class="col-sm-2 col-form-label"><strong>Barcode: </strong></label>
+        <div class="col-sm-8">
+            <input type="text" title="barcode" value="" class="form-control" id="barcode">
+        </div>
+    </div>
+    <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+        Back to list
+    </button>
+    <button type="submit" class="btn btn-success mx-1">
+        Submit
+    </button>
+</form>

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DeliveryDocumentsService {
-  private apiUrl = '';
+  private apiUrl = 'https://localhost:7088/api/DeliveryDocuments';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class DeliveryDocumentsService {
   }
 
   // Get All
-  getDeliveryDocument(): Observable<DeliveryDocument[]> {
+  getDeliveryDocuments(): Observable<DeliveryDocument[]> {
     return this.http.get<DeliveryDocument[]>(this.apiUrl);
   }
 
@@ -29,7 +29,7 @@ export class DeliveryDocumentsService {
     return this.http.get<DeliveryDocument>(url);
   }
 
-  // Update full
+  // Update
   updateDeliveryDocument(
     deliveryDocument: DeliveryDocument
   ): Observable<DeliveryDocument> {
@@ -37,12 +37,15 @@ export class DeliveryDocumentsService {
     return this.http.put<DeliveryDocument>(url, deliveryDocument);
   }
 
-  approveDeliveryDocument(deliveryDocument: DeliveryDocument) {
-    const url = `${this.apiUrl}/Approve/${deliveryDocument.documentID}`;
-    return this.http.put<DeliveryDocument>(url, deliveryDocument);
+  // Update isApproved
+  approveDeliveryDocument(id: number): Observable<void> {
+    const url = `${this.apiUrl}/Approve/${id}`;
+    return this.http.put<void>(url, {});
   }
-  cancelDeliveryDocument(deliveryDocument: DeliveryDocument) {
-    const url = `${this.apiUrl}/Cancel/${deliveryDocument.documentID}`;
-    return this.http.put<DeliveryDocument>(url, deliveryDocument);
+
+  // Update isCancelled
+  cancelDeliveryDocument(id: number) {
+    const url = `${this.apiUrl}/Cancel/${id}`;
+    return this.http.put<void>(url, {});
   }
 }

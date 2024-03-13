@@ -15,55 +15,28 @@
   </thead>
 
   <tbody>
-    <ng-container *ngIf="suppliers.length; else noData">
-      <tr *ngFor="let supplier of suppliers">
-        <td>
-          {{supplier.supplierID}}
-        </td>
-        <td>
-          {{supplier.supplierName}}
-        </td>
-        <td>
-          {{supplier.supplierAddress}}
-        </td>
-        <td>
-          {{supplier.supplierCity}}
-        </td>
-        <td>
-          {{supplier.supplierZipcode}}
-        </td>
-        <td>
-          <button title="edit" routerLink="edit" class="btn btn-secondary"><i class="fa-solid fa-edit"></i></button>
-          <button title="delete" routerLink="delete" class="btn btn-danger m-1"><i
-              class="fa-solid fa-trash"></i></button>
-        </td>
-      </tr>
-    </ng-container>
-
-    <ng-template #noData>
-      <tr *ngFor="let supplier of tempSuppliers">
-        <td>
-          {{supplier.supplierID}}
-        </td>
-        <td>
-          {{supplier.supplierName}}
-        </td>
-        <td>
-          {{supplier.supplierAddress}}
-        </td>
-        <td>
-          {{supplier.supplierCity}}
-        </td>
-        <td>
-          {{supplier.supplierZipcode}}
-        </td>
-        <td>
-          <button title="edit" routerLink="edit/{{supplier.supplierID}}" class="btn btn-secondary"><i
-              class="fa-solid fa-edit"></i></button>
-          <button title="delete" routerLink="delete/{{supplier.supplierID}}" class="btn btn-danger m-1"><i
-              class="fa-solid fa-trash"></i></button>
-        </td>
-      </tr>
-    </ng-template>
+    <tr *ngFor="let supplier of suppliers">
+      <td>
+        {{supplier.supplierID}}
+      </td>
+      <td>
+        {{supplier.supplierName}}
+      </td>
+      <td>
+        {{supplier.supplierAddress}}
+      </td>
+      <td>
+        {{supplier.supplierCity}}
+      </td>
+      <td>
+        {{supplier.supplierZipcode}}
+      </td>
+      <td>
+        <button title="edit" routerLink="edit/{{supplier.supplierID}}" class="btn btn-secondary"><i
+            class="fa-solid fa-edit"></i></button>
+        <button title="delete" routerLink="delete/{{supplier.supplierID}}" class="btn btn-danger m-1"><i
+            class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>
   </tbody>
 </table>

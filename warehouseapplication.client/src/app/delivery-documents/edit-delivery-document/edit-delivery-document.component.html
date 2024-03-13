@@ -1,62 +1,70 @@
-<p>view-delivery-document works!</p>
 <h2 class="my-3">Editing document</h2>
 
 <form>
     <div class="mb-3 row">
-        <label for="staticName" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
+        <label for="name" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
         <div class="col-sm-8">
-            <input type="text" readonly title="name" value="" class="form-control" id="statiName">
+            <input type="text" title="name" value="" class="form-control" id="name">
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="statiStreet" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
+        <label for="supplier" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
         <div class="col-sm-8">
-            <input type="text" title="street" value="" class="form-control" id="statiStreet">
+            <input type="text" title="supplier" value="" class="form-control" id="supplier">
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="statiStreet" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
+        <label for="storehouse" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
         <div class="col-sm-8">
-            <input type="text" title="street" value="" class="form-control" id="statiStreet">
+            <input type="text" title="storehouse input" value="" class="form-control" id="storehouse">
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="statiCity" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
-        <div class="col-sm-8">
-            <table class="table align-middle mb-0 bg-white caption-top mb-4">
-                <thead class="table-dark">
+        <label for="labelList" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
+        <div class="col-auto">
+            <table class="table align-middle mb-0 bg-white caption-top mx-2">
+                <thead class=" table-dark">
                     <tr>
-                        <th>Label ID</th>
-                        <th>Label Name</th>
+                        <th>Name</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody class="table-responsive-sm">
                     <tr>
-                        <td>{{1}}</td>
-                        <td>{{"Nazwa"}}</td>
+                        <td>{{"name"}}</td>
+                        <td class="col-sm-1">
+                            <button title="deleteLabel" class="btn"><i class="fa btn-close m-auto"></i></button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="statiZipcode" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
+        <label for="productList" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
         <div class="col-sm-8">
-            <table class="table align-middle mb-0 bg-white caption-top mb-4">
+            <table class="table align-middle mb-0 bg-white caption-top">
                 <thead class="table-dark">
                     <tr>
                         <th>Name</th>
                         <th>Barcode</th>
                         <th>Quantity</th>
                         <th>Price</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="table-responsive-sm">
                     <tr>
-                        <td>nazwa</td>
+                        <td></td>
                         <td>kod</td>
                         <td>ilość</td>
                         <td>{{4 | currency}}</td>
+                        <td>
+                            <button title="edit" class="btn btn-close-white text-muted pe-auto"><i
+                                    class="fa fa-pencil"></i></button>
+                            <button title="delete" class="btn btn-close-white text-muted pe-auto"><i
+                                    class="fa btn-close"></i></button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -66,7 +74,7 @@
     <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
         Back to list
     </button>
-    <button type="submit" class="btn btn-danger mx-1">
-        Delete
+    <button type="submit" class="btn btn-success mx-1">
+        Submit
     </button>
 </form>

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DeliveryDocument } from 'src/app/models/delivery-document';
+import { DeliveryDocumentsService } from 'src/app/services/delivery-documents.service';
 
 @Component({
   selector: 'app-view-delivery-document',
@@ -8,20 +10,20 @@ import { DeliveryDocument } from 'src/app/models/delivery-document';
   styleUrls: ['./view-delivery-document.component.css'],
 })
 export class ViewDeliveryDocumentComponent {
-  deliveryDocuments: DeliveryDocument[] = [];
-  constructor(private http: HttpClient) {}
+  deliveryDocumentDetails!: DeliveryDocument;
+  ID!: number;
+  constructor(
+    private deliveryDocumentsServices: DeliveryDocumentsService,
+    private activeRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.http
-      .get<DeliveryDocument[]>(
-        'https://localhost:7088/api/DeliveryDocuments/:id'
-      )
-      .subscribe(
-        (result) => {
-          this.deliveryDocuments = result;
-          console.log(result);
-        },
-        (error) => console.error(error)
-      );
+    this.ID = parseInt(this.activeRoute.snapshot.paramMap.get('id') || '');
+
+    this.deliveryDocumentsServices
+      .getDeliveryDocumentByID(this.ID)
+      .subscribe((data: DeliveryDocument) => {
+        this.deliveryDocumentDetails = data;
+      });
   }
 }

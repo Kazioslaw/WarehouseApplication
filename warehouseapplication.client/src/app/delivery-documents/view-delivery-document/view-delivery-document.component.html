@@ -1,24 +1,32 @@
-<h2 class="my-3">Displaying full document</h2>
-
+<h2 class="my-3">Document Details</h2>
 <form>
     <div class="mb-3 row">
         <label for="staticName" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
         <div class="col-sm-auto">
-            <input type="text" readonly title="documentId" value="" class="form-control-plaintext" id="staticName">
+            <input type="text" disabled title="documentId" value="{{deliveryDocumentDetails.documentID}}"
+                class="form-control" id="staticName">
         </div>
     </div>
     <div class="mb-3 row">
         <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
         <div class="col-sm-auto">
-            <input type="text" readonly title="supplierName" value="" class="form-control-plaintext"
-                id="staticSupplierName">
+            <input type="text" disabled title="supplierName" value="{{deliveryDocumentDetails.supplier?.supplierName}}"
+                class="form-control" id="staticSupplierName">
         </div>
     </div>
     <div class="mb-3 row">
         <label for="staticStorehouseName" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
         <div class="col-sm-auto">
-            <input type="text" readonly title="storehouseName" value="" class="form-control-plaintext"
+            <input type="text" disabled title="storehouseName"
+                value="{{deliveryDocumentDetails.storehouse?.storehouseName}}" class="form-control"
                 id="staticStorehouseName">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Approved: </strong></label>
+        <div class="col-sm-auto">
+            <input type="text" disabled title="isApproved" value="{{deliveryDocumentDetails.isApproved ? 'Yes' : 'No'
+                }}" class="form-control" id="staticSupplierName">
         </div>
     </div>
     <div class="mb-3 row">
@@ -30,9 +38,9 @@
                         <th>Label Name</th>
                     </tr>
                 </thead>
-                <tbody class="table-responsive-sm">
+                <tbody class="table-responsive-sm" *ngFor="let labelDocument of deliveryDocumentDetails.labelDocuments">
                     <tr>
-                        <td></td>
+                        <td>{{labelDocument.label?.labelName}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -50,12 +58,12 @@
                         <th>Price</th>
                     </tr>
                 </thead>
-                <tbody class="table-responsive-sm">
+                <tbody class="table-responsive-sm" *ngFor="let productsList of deliveryDocumentDetails.products">
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{productsList.product?.productName}}</td>
+                        <td>{{productsList.product?.productBarcode}}</td>
+                        <td>{{productsList.quantity}}</td>
+                        <td>{{productsList.price}}</td>
                     </tr>
                 </tbody>
             </table>
