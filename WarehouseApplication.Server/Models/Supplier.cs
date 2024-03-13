@@ -11,7 +11,6 @@ namespace WarehouseApplication.Server.Models
 		public string SupplierCity { get; set; }
 		public string SupplierZipcode { get; set;}
 
-		public ICollection<DeliveryDocument>? Documents { get; set; }
-
+		public ICollection<DeliveryDocument> Documents { get; set; }
 	}
 }

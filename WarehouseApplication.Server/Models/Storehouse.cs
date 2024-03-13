@@ -9,6 +9,7 @@ namespace WarehouseApplication.Server.Models
 		public string StorehouseName { get; set; }
 		public string StorehouseSymbol { get; set; }
 
-		public ICollection<DeliveryDocument>? Documents { get; set; }
-	}
+		public ICollection<DeliveryDocument> Documents { get; set; }
+
+    }
 }

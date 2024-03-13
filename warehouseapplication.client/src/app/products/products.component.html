@@ -1,33 +1,54 @@
-<div class="d-flex justify-content-between align-items-center mb-2">
-	<h2 class="align-middle caption-top">Towary</h2>
-	<div>
-		<button class="btn btn-secondary">Add</button>
-	</div>
+<div class="d-flex justify-content-between align-items-center mb-2 justify-between">
+	<h2 class="align-middle caption-top">Products</h2>
+	<button class="btn btn-primary" routerLink="add">Add</button>
 </div>
-<table class="table align-middle mb-0 bg-white caption-top" *ngIf="products">
-	<thead>
+<table class="table align-middle mb-0 bg-white caption-top fixed-header" *ngIf="products">
+	<thead class="table-dark">
 		<tr>
 			<th>ID</th>
 			<th>Product</th>
 			<th>Barcode</th>
-			<th>Action</th>
+			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let product of products">
-			<td>
-				{{product.productID}}
-			</td>
-			<td>
-				{{product.productName}}
-			</td>
-			<td>
-				{{product.productBarcode}}
-			</td>
-			<td>
-				<button [routerLink]="['/']" class="btn btn-primary mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
-				<button [routerLink]="['/']" class="btn btn-danger mx-1"><i class="fa-solid fa-trash"></i></button>
-			</td>
-		</tr>
+		<ng-container *ngIf="products.length; else noData">
+			<tr *ngFor="let product of products">
+				<td>
+					{{product.productID}}
+				</td>
+				<td>
+					{{product.productName}}
+				</td>
+				<td>
+					{{product.productBarcode}}
+				</td>
+				<td>
+					<button type="button" title="edit" routerLink="edit" class="btn btn-dark mx-1"><i
+							class="fa-solid fa-pen-to-square"></i></button>
+					<button type="button" title="delete" routerLink="delete" class="btn btn-danger mx-1"><i
+							class="fa-solid fa-trash"></i></button>
+				</td>
+			</tr>
+		</ng-container>
+		<ng-template #noData>
+			<tr>
+				<td>
+					1
+				</td>
+				<td>
+					Jabłoń Grójecka
+				</td>
+				<td>
+					5901384505400
+				</td>
+				<td>
+					<button routerLink="edit-product" class="btn btn-dark" disabled><i
+							class="fa-solid fa-pen-to-square"></i></button>
+					<button routerLink="delete-product" class="btn btn-danger mx-1" disabled><i
+							class="fa-solid fa-trash"></i></button>
+				</td>
+			</tr>
+		</ng-template>
 	</tbody>
 </table>

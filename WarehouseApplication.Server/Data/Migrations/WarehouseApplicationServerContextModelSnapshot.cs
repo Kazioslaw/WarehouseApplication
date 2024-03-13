@@ -17,25 +17,10 @@ namespace WarehouseApplication.Server.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DeliveryDocumentLabel", b =>
-                {
-                    b.Property<int>("DocumentsDocumentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LabelsLabelID")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentsDocumentID", "LabelsLabelID");
-
-                    b.HasIndex("LabelsLabelID");
-
-                    b.ToTable("DeliveryDocumentLabel");
-                });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.DeliveryDocument", b =>
                 {
@@ -83,6 +68,21 @@ namespace WarehouseApplication.Server.Data.Migrations
                     b.ToTable("Label");
                 });
 
+            modelBuilder.Entity("WarehouseApplication.Server.Models.LabelDocument", b =>
+                {
+                    b.Property<int>("DocumentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LabelID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentID", "LabelID");
+
+                    b.HasIndex("LabelID");
+
+                    b.ToTable("LabelDocument");
+                });
+
             modelBuilder.Entity("WarehouseApplication.Server.Models.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -106,11 +106,11 @@ namespace WarehouseApplication.Server.Data.Migrations
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.ProductList", b =>
                 {
-                    b.Property<int>("ListId")
+                    b.Property<int>("ListID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ListId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ListID"));
 
                     b.Property<int>("DocumentID")
                         .HasColumnType("int");
@@ -124,7 +124,7 @@ namespace WarehouseApplication.Server.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ListId");
+                    b.HasKey("ListID");
 
                     b.HasIndex("DocumentID");
 
@@ -183,21 +183,6 @@ namespace WarehouseApplication.Server.Data.Migrations
                     b.ToTable("Supplier");
                 });
 
-            modelBuilder.Entity("DeliveryDocumentLabel", b =>
-                {
-                    b.HasOne("WarehouseApplication.Server.Models.DeliveryDocument", null)
-                        .WithMany()
-                        .HasForeignKey("DocumentsDocumentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WarehouseApplication.Server.Models.Label", null)
-                        .WithMany()
-                        .HasForeignKey("LabelsLabelID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WarehouseApplication.Server.Models.DeliveryDocument", b =>
                 {
                     b.HasOne("WarehouseApplication.Server.Models.Storehouse", "Storehouse")
@@ -213,6 +198,25 @@ namespace WarehouseApplication.Server.Data.Migrations
                     b.Navigation("Storehouse");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("WarehouseApplication.Server.Models.LabelDocument", b =>
+                {
+                    b.HasOne("WarehouseApplication.Server.Models.DeliveryDocument", "Document")
+                        .WithMany("LabelDocuments")
+                        .HasForeignKey("DocumentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WarehouseApplication.Server.Models.Label", "Label")
+                        .WithMany("LabelDocuments")
+                        .HasForeignKey("LabelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("Label");
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.ProductList", b =>
@@ -236,7 +240,14 @@ namespace WarehouseApplication.Server.Data.Migrations
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.DeliveryDocument", b =>
                 {
+                    b.Navigation("LabelDocuments");
+
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WarehouseApplication.Server.Models.Label", b =>
+                {
+                    b.Navigation("LabelDocuments");
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.Product", b =>

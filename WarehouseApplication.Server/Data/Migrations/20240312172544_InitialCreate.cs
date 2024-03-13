@@ -76,7 +76,7 @@ namespace WarehouseApplication.Server.Data.Migrations
                     IsApproved = table.Column<bool>(type: "bit", nullable: false),
                     IsCancelled = table.Column<bool>(type: "bit", nullable: false),
                     SupplierID = table.Column<int>(type: "int", nullable: false),
-                    StorehouseID = table.Column<int>(type: "int", nullable: false)
+                    StorehouseID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,8 +85,7 @@ namespace WarehouseApplication.Server.Data.Migrations
                         name: "FK_DeliveryDocument_Storehouse_StorehouseID",
                         column: x => x.StorehouseID,
                         principalTable: "Storehouse",
-                        principalColumn: "StorehouseID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StorehouseID");
                     table.ForeignKey(
                         name: "FK_DeliveryDocument_Supplier_SupplierID",
                         column: x => x.SupplierID,
@@ -96,24 +95,24 @@ namespace WarehouseApplication.Server.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeliveryDocumentLabel",
+                name: "LabelDocument",
                 columns: table => new
                 {
-                    DocumentsDocumentID = table.Column<int>(type: "int", nullable: false),
-                    LabelsLabelID = table.Column<int>(type: "int", nullable: false)
+                    LabelID = table.Column<int>(type: "int", nullable: false),
+                    DocumentID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeliveryDocumentLabel", x => new { x.DocumentsDocumentID, x.LabelsLabelID });
+                    table.PrimaryKey("PK_LabelDocument", x => new { x.DocumentID, x.LabelID });
                     table.ForeignKey(
-                        name: "FK_DeliveryDocumentLabel_DeliveryDocument_DocumentsDocumentID",
-                        column: x => x.DocumentsDocumentID,
+                        name: "FK_LabelDocument_DeliveryDocument_DocumentID",
+                        column: x => x.DocumentID,
                         principalTable: "DeliveryDocument",
                         principalColumn: "DocumentID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DeliveryDocumentLabel_Label_LabelsLabelID",
-                        column: x => x.LabelsLabelID,
+                        name: "FK_LabelDocument_Label_LabelID",
+                        column: x => x.LabelID,
                         principalTable: "Label",
                         principalColumn: "LabelID",
                         onDelete: ReferentialAction.Cascade);
@@ -123,7 +122,7 @@ namespace WarehouseApplication.Server.Data.Migrations
                 name: "ProductList",
                 columns: table => new
                 {
-                    ListId = table.Column<int>(type: "int", nullable: false)
+                    ListID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DocumentID = table.Column<int>(type: "int", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
@@ -132,7 +131,7 @@ namespace WarehouseApplication.Server.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductList", x => x.ListId);
+                    table.PrimaryKey("PK_ProductList", x => x.ListID);
                     table.ForeignKey(
                         name: "FK_ProductList_DeliveryDocument_DocumentID",
                         column: x => x.DocumentID,
@@ -158,9 +157,9 @@ namespace WarehouseApplication.Server.Data.Migrations
                 column: "SupplierID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeliveryDocumentLabel_LabelsLabelID",
-                table: "DeliveryDocumentLabel",
-                column: "LabelsLabelID");
+                name: "IX_LabelDocument_LabelID",
+                table: "LabelDocument",
+                column: "LabelID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductList_DocumentID",
@@ -177,7 +176,7 @@ namespace WarehouseApplication.Server.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DeliveryDocumentLabel");
+                name: "LabelDocument");
 
             migrationBuilder.DropTable(
                 name: "ProductList");

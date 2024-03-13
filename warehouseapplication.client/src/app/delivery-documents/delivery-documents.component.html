@@ -1,34 +1,71 @@
 <div class="d-flex justify-content-between align-items-center mb-2">
-  <h2 class="align-middle caption-top">Dokumenty dostaw</h2>
+  <h2 class="align-middle caption-top">Delivery Documents</h2>
   <div>
-    <button class="btn btn-secondary">Add</button>
+    <button class="btn btn-primary" routerLink="add">Add</button>
   </div>
 </div>
 <table class="table align-middle mb-0 bg-white caption-top" *ngIf="deliveryDocuments">
-  <thead>
+  <thead class="table-dark">
     <tr>
       <th>ID</th>
       <th>Supplier</th>
+      <th>Warehouse</th>
+      <th>Label</th>
+      <th>Product</th>
       <th>Approved</th>
-      <th>Action</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody *ngFor="let deliveryDocument of deliveryDocuments">
-    <tr *ngIf="!deliveryDocument.isCancelled">
-      <td>
-        {{deliveryDocument.documentID}}
-      </td>
-      <td>
-        {{deliveryDocument.supplierName}}
-      </td>
-      <td>
-        {{deliveryDocument.isApproved}}
-      </td>
-      <td>
-        <button [routerLink]="['/']" *ngIf="!deliveryDocument.isApproved" class="btn btn-secondary"><i class="fa-solid fa-edit"></i></button>
-        <button [routerLink]="['/']" class="btn btn-success m-1"><i class="fa-solid fa-check"></i></button>
-        <button [routerLink]="['/']" class="btn btn-danger m-1"><i class="fa-solid fa-cancel"></i></button>
-      </td>
+    <tr>
+      <ng-container *ngIf="!deliveryDocument.isCancelled">
+        <td>
+          {{deliveryDocument.documentID}}
+        </td>
+        <td>
+          {{deliveryDocument.supplier?.supplierName}}
+        </td>
+        <td>
+          {{deliveryDocument.storehouse?.storehouseName ?? "Brak danych"}}
+        </td>
+        <td>
+          <div *ngFor="let labelDocument of deliveryDocument.labelDocuments">
+            {{
+            labelDocument.label?.labelName
+            }}
+          </div>
+        </td>
+        <td>
+          <div *ngFor="let product of deliveryDocument.products">
+            {{ product.product?.productName }}
+          </div>
+        </td>
+        <td>
+          <strong>{{deliveryDocument.isApproved ? " Approved" : "Not Approved" }}</strong>
+        </td>
+        <td>
+          <ng-container *ngIf="!deliveryDocument.isApproved;else disabledButtons">
+            <button type="button" title="view" class="btn btn-secondary m-1 d-sm-inline"
+              routerLink="view/{{deliveryDocument.documentID}}"><i class="fa-solid fa-list-ul"></i></button>
+            <button type="button" title="edit" routerLink="edit/{{deliveryDocument.documentID}}"
+              class="btn btn-dark  d-sm-inline"><i class="fa-solid fa-edit"></i></button>
+            <button type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
+              class="btn btn-success m-1 d-sm-inline"><i class="fa-solid fa-check"></i></button>
+            <button type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
+              class="btn btn-danger d-sm-inline"><i class="fa-solid fa-cancel"></i></button>
+          </ng-container>
+          <ng-template #disabledButtons>
+            <button type="button" title="view" class="btn btn-secondary m-1 d-sm-inline"
+              routerLink="view/{{deliveryDocument.documentID}}"><i class="fa-solid fa-list-ul"></i></button>
+            <button disabled type="button" title="edit" routerLink="edit/{{deliveryDocument.documentID}}"
+              class="btn btn-outline-dark d-sm-inline"><i class="fa-solid fa-edit"></i></button>
+            <button disabled type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
+              class="btn btn-outline-dark m-1 d-sm-inline"><i class="fa-solid fa-check"></i></button>
+            <button disabled type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
+              class="btn btn-outline-dark d-sm-inline"><i class="fa-solid fa-cancel"></i></button>
+          </ng-template>
+        </td>
+      </ng-container>
     </tr>
   </tbody>
 </table>

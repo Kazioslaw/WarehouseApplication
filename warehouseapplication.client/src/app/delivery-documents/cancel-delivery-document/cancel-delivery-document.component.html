@@ -1,0 +1,69 @@
+<h2 class="my-3">Cancelling document</h2>
+
+<form>
+    <div class="mb-3 row">
+        <label for="staticName" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
+        <div class="col-sm-auto">
+            <input type="text" readonly title="name" value="" class="form-control" id="statiName">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="statiStreet" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
+        <div class="col-sm-auto">
+            <input type="text" title="street" value="" class="form-control" id="statiStreet">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="statiStreet" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
+        <div class="col-sm-auto">
+            <input type="text" title="street" value="" class="form-control" id="statiStreet">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="statiCity" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
+        <div class="col-sm-auto">
+            <table class="table align-middle mb-0 bg-white caption-top mb-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Label Name</th>
+                    </tr>
+                </thead>
+                <tbody class="table-responsive-sm">
+                    <tr>
+                        <td>{{"Nazwa"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="statiZipcode" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
+        <div class="col-sm-auto">
+            <table class="table align-middle mb-0 bg-white caption-top mb-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Barcode</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody class="table-responsive-sm">
+                    <tr>
+                        <td>nazwa</td>
+                        <td>kod</td>
+                        <td>ilość</td>
+                        <td>{{4 | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+        Back to list
+    </button>
+    <button type="submit" class="btn btn-danger mx-1">
+        Cancel
+    </button>
+</form>

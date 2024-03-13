@@ -1,11 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-
-interface Storehouse {
-  storehouseID: number,
-  storehouseName: string,
-  storehouseSymbol: string,
-}
+import { Storehouse } from '../models/storehouse';
 
 @Component({
   selector: 'storehouses',
