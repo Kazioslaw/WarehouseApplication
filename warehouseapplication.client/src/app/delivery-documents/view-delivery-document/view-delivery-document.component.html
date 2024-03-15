@@ -1,76 +1,80 @@
-<h2 class="my-3">Document Details</h2>
-<form>
-    <div class="mb-3 row">
-        <label for="staticName" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
-        <div class="col-sm-auto">
-            <input type="text" disabled title="documentId" value="{{deliveryDocumentDetails.documentID}}"
-                class="form-control" id="staticName">
+<div *ngIf="deliveryDocumentDetails">
+    <h2 class="my-3">Document Details</h2>
+    <form>
+        <div class="mb-3 row">
+            <label for="staticName" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
+            <div class="col-sm-auto">
+                <input type="text" disabled title="documentId" value="{{deliveryDocumentDetails.documentID}}"
+                    class="form-control" id="staticName">
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
-        <div class="col-sm-auto">
-            <input type="text" disabled title="supplierName" value="{{deliveryDocumentDetails.supplier?.supplierName}}"
-                class="form-control" id="staticSupplierName">
+        <div class="mb-3 row">
+            <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
+            <div class="col-sm-auto">
+                <input type="text" disabled title="supplierName"
+                    value="{{deliveryDocumentDetails.supplier?.supplierName}}" class="form-control"
+                    id="staticSupplierName">
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="staticStorehouseName" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
-        <div class="col-sm-auto">
-            <input type="text" disabled title="storehouseName"
-                value="{{deliveryDocumentDetails.storehouse?.storehouseName}}" class="form-control"
-                id="staticStorehouseName">
+        <div class="mb-3 row">
+            <label for="staticStorehouseName" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
+            <div class="col-sm-auto">
+                <input type="text" disabled title="storehouseName"
+                    value="{{deliveryDocumentDetails.storehouse?.storehouseName}}" class="form-control"
+                    id="staticStorehouseName">
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Approved: </strong></label>
-        <div class="col-sm-auto">
-            <input type="text" disabled title="isApproved" value="{{deliveryDocumentDetails.isApproved ? 'Yes' : 'No'
+        <div class="mb-3 row">
+            <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Approved: </strong></label>
+            <div class="col-sm-auto">
+                <input type="text" disabled title="isApproved" value="{{deliveryDocumentDetails.isApproved ? 'Yes' : 'No'
                 }}" class="form-control" id="staticSupplierName">
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="labelsList" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
-        <div class="col-sm-auto">
-            <table class="table align-middle mb-0 bg-white caption-top mb-4">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Label Name</th>
-                    </tr>
-                </thead>
-                <tbody class="table-responsive-sm" *ngFor="let labelDocument of deliveryDocumentDetails.labelDocuments">
-                    <tr>
-                        <td>{{labelDocument.label?.labelName}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="mb-3 row">
+            <label for="labelsList" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
+            <div class="col-sm-auto">
+                <table class="table align-middle mb-0 bg-white caption-top mb-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Label Name</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-responsive-sm"
+                        *ngFor="let labelDocument of deliveryDocumentDetails.labelDocuments">
+                        <tr>
+                            <td>{{labelDocument.label?.labelName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="productsList" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
-        <div class="col-sm-auto">
-            <table class="table align-middle mb-0 bg-white caption-top mb-4">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Barcode</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody class="table-responsive-sm" *ngFor="let productsList of deliveryDocumentDetails.products">
-                    <tr>
-                        <td>{{productsList.product?.productName}}</td>
-                        <td>{{productsList.product?.productBarcode}}</td>
-                        <td>{{productsList.quantity}}</td>
-                        <td>{{productsList.price}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="mb-3 row">
+            <label for="productsList" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
+            <div class="col-sm-auto">
+                <table class="table align-middle mb-0 bg-white caption-top mb-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Barcode</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-responsive-sm" *ngFor="let productsList of deliveryDocumentDetails.products">
+                        <tr>
+                            <td>{{productsList.product?.productName}}</td>
+                            <td>{{productsList.product?.productBarcode}}</td>
+                            <td>{{productsList.quantity}}</td>
+                            <td>{{productsList.price | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
-        Back to list
-    </button>
-</form>
+        <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+            Back to list
+        </button>
+    </form>
+</div>

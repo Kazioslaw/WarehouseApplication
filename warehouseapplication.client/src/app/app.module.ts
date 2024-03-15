@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { StorehousesComponent } from './storehouses/storehouses.component';
@@ -22,6 +23,7 @@ import { EditDeliveryDocumentComponent } from './delivery-documents/edit-deliver
 import { CancelDeliveryDocumentComponent } from './delivery-documents/cancel-delivery-document/cancel-delivery-document.component';
 import { ApproveDeliveryDocumentComponent } from './delivery-documents/approve-delivery-document/approve-delivery-document.component';
 import { HomeComponent } from './home/home.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { HomeComponent } from './home/home.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     NgbModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },

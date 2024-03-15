@@ -1,35 +1,69 @@
 <h2 class="my-3">Adding new supplier</h2>
 
-<form>
+<form #supplierForm="ngForm" (ngSubmit)="saveSupplier()">
   <div class="mb-3 row">
-    <label for="inputName" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
+    <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="inputName">
+      <input type="text" class="form-control" id="name" name="name" required minlength="3"
+        [(ngModel)]="newSupplier.supplierName" placeholder="Enter name">
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['name']?.touched && supplierForm.controls['name']?.hasError('required')">
+        Name is required</div>
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['name']?.touched && supplierForm.controls['name']?.hasError('minlength')">
+        Name must have at least 3 characters
+      </div>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="inputPassword" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
+    <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
     <div class="col-sm-8">
-      <input type="password" class="form-control" id="inputPassword">
+      <input type="text" class="form-control" id="street" name="street" [(ngModel)]="newSupplier.supplierAddress"
+        required minlength="3" maxlength="60" placeholder="Enter address">
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['street']?.touched && supplierForm.controls['street']?.hasError('required')">
+        Address is required
+      </div>
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['street']?.touched && supplierForm.controls['street']?.hasError('minlength') || supplierForm.controls['street'].hasError('maxlength')">
+        Length of address should be between 3 and 60 characters
+      </div>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="inputPassword" class="col-sm-2 col-form-label"><strong>City: </strong></label>
+    <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
     <div class="col-sm-8">
-      <input type="password" class="form-control" id="inputPassword">
+      <input type="text" class="form-control" id="city" name="city" [(ngModel)]="newSupplier.supplierCity" required
+        minlength="3" maxlength="30" placeholder="Enter city name">
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['city']?.touched && supplierForm.controls['city']?.hasError('required')">
+        City name is required
+      </div>
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['city']?.touched && supplierForm.controls['city']?.hasError('minlength') || supplierForm.controls['city'].hasError('maxlength')">
+        Length of city name should be between 3 and 30 characters
+      </div>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="inputPassword" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
+    <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
     <div class="col-sm-8">
-      <input type="password" class="form-control" id="inputPassword">
+      <input type="text" class="form-control" id="zipcode" name="zipcode" [(ngModel)]="newSupplier.supplierZipcode"
+        placeholder="Enter zipcode" required minlength="3" maxlength="60">
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['zipcode']?.touched && supplierForm.controls['zipcode']?.hasError('required')">
+        Zipcode is required
+      </div>
+      <div class="text-danger"
+        *ngIf="supplierForm.controls['zipcode']?.touched && supplierForm.controls['zipcode']?.hasError('minlength') || supplierForm.controls['zipcode'].hasError('maxlength')">
+        Length of zipcode should be between 3 and 60 characters
+      </div>
     </div>
   </div>
-
-  <button class="btn btn-secondary mx-1" routerLink="../">
+  <button type="button" class="btn btn-secondary mx-1" routerLink="/..">
     Back to list
   </button>
-  <button class="btn btn-danger mx-1" type="submit">
+  <button class="btn btn-success mx-1" type="submit" [disabled]="!supplierForm.valid">
     Submit
   </button>
 </form>

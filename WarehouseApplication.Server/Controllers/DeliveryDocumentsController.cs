@@ -19,48 +19,20 @@ namespace WarehouseApplication.Server.Controllers
     {
         private readonly WarehouseApplicationServerContext _context;
 
-		public DeliveryDocumentsController(WarehouseApplicationServerContext context)
+        public DeliveryDocumentsController(WarehouseApplicationServerContext context)
         {
             _context = context;
-		}
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DeliveryDocument>>> GetDeliveryDocument()
         {
-            var deliveryDocuments = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments).ThenInclude(ld => ld.Label).Select(dd => 
-            new DeliveryDocument
-            {
-                DocumentID = dd.DocumentID,
-                IsApproved = dd.IsApproved,
-                IsCancelled = dd.IsCancelled,
-                SupplierID = dd.SupplierID,
-                Supplier = new Supplier
-                {
-                    SupplierName = dd.Supplier.SupplierName,
-                },
-                StorehouseID = dd.StorehouseID,
-                Storehouse = new Storehouse { 
-                    StorehouseName = dd.Storehouse.StorehouseName, 
-                },
-                LabelDocuments = dd.LabelDocuments.Select(ld => new LabelDocument
-                {
-                    LabelID = ld.Label.LabelID,
-                    Label = new Label { 
-                        LabelName = ld.Label.LabelName
-                    }
-                }).ToList(),
-                Products = dd.Products.Select(pl => new ProductList
-                {
-                    ProductID = pl.Product.ProductID,
-                    Product = new Product
-                    {
-                        ProductName = pl.Product.ProductName,
-                        ProductBarcode = pl.Product.ProductBarcode,
-                    },
-                    Quantity = pl.Quantity,
-                    Price = pl.Price
-                }).ToList()
-            }).ToListAsync();
+            var deliveryDocuments = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
+                                                                    .ThenInclude(ld => ld.Label)
+                                                                  .Include(dd => dd.Products)
+                                                                    .ThenInclude(p => p.Product)
+                                                                  .Include(dd => dd.Storehouse)
+                                                                  .Include(dd => dd.Supplier).ToListAsync();
 
             return deliveryDocuments;
         }
@@ -68,42 +40,13 @@ namespace WarehouseApplication.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DeliveryDocument>> GetDeliveryDocument(int id)
         {
-            var deliveryDocument = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments).ThenInclude(ld => ld.Label).Select(dd =>
-            new DeliveryDocument
-            {
-                DocumentID = dd.DocumentID,
-                IsApproved = dd.IsApproved,
-                IsCancelled = dd.IsCancelled,
-                SupplierID = dd.SupplierID,
-                Supplier = new Supplier
-                {
-                    SupplierName = dd.Supplier.SupplierName,
-                },
-                StorehouseID = dd.StorehouseID,
-                Storehouse = new Storehouse
-                {
-                    StorehouseName = dd.Storehouse.StorehouseName,
-                },
-                LabelDocuments = dd.LabelDocuments.Select(ld => new LabelDocument
-                {
-                    LabelID = ld.Label.LabelID,
-                    Label = new Label
-                    {
-                        LabelName = ld.Label.LabelName
-                    }
-                }).ToList(),
-                Products = dd.Products.Select(pl => new ProductList
-                {
-                    ProductID = pl.Product.ProductID,
-                    Product = new Product
-                    {
-                        ProductName = pl.Product.ProductName,
-                        ProductBarcode = pl.Product.ProductBarcode,
-                    },
-                    Quantity = pl.Quantity,
-                    Price = pl.Price
-                }).ToList()
-            }).SingleOrDefaultAsync(dd => dd.DocumentID == id);
+            var deliveryDocument = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
+                                                                    .ThenInclude(ld => ld.Label)
+                                                                  .Include(dd=> dd.Products)
+                                                                    .ThenInclude(p => p.Product)
+                                                                  .Include(dd => dd.Storehouse)
+                                                                  .Include(dd => dd.Supplier)
+                                                                  .SingleOrDefaultAsync(dd => dd.DocumentID == id);
 
             if(!DeliveryDocumentExists(id))
             {

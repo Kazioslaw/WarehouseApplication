@@ -9,6 +9,6 @@ namespace WarehouseApplication.Server.Models
 		public string ProductName { get; set; }
 		public string ProductBarcode { get; set; }
 	
-		public ICollection<ProductList> ProductsList { get; set; }
+		public ICollection<ProductList>? ProductsList { get; set; } 
 	}
 }

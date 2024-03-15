@@ -48,7 +48,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasIndex("SupplierID");
 
-                    b.ToTable("DeliveryDocument");
+                    b.ToTable("DeliveryDocument", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.Label", b =>
@@ -65,7 +65,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasKey("LabelID");
 
-                    b.ToTable("Label");
+                    b.ToTable("Label", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.LabelDocument", b =>
@@ -80,7 +80,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasIndex("LabelID");
 
-                    b.ToTable("LabelDocument");
+                    b.ToTable("LabelDocument", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.Product", b =>
@@ -101,7 +101,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasKey("ProductID");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.ProductList", b =>
@@ -130,7 +130,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("ProductList");
+                    b.ToTable("ProductList", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.Storehouse", b =>
@@ -151,7 +151,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasKey("StorehouseID");
 
-                    b.ToTable("Storehouse");
+                    b.ToTable("Storehouse", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.Supplier", b =>
@@ -180,7 +180,7 @@ namespace WarehouseApplication.Server.Data.Migrations
 
                     b.HasKey("SupplierID");
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Supplier", (string)null);
                 });
 
             modelBuilder.Entity("WarehouseApplication.Server.Models.DeliveryDocument", b =>

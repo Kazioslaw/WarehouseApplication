@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -13,7 +13,8 @@ export class DeleteProductComponent {
   ID!: number;
   constructor(
     private productsService: ProductsService,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -21,6 +22,13 @@ export class DeleteProductComponent {
 
     this.productsService.getProductByID(this.ID).subscribe((data: Product) => {
       this.productDetails = data;
+    });
+  }
+
+  delete(id: number): void {
+    this.productsService.deleteProduct(id).subscribe(() => {
+      console.log('Product Deleted'), alert('Product deleted');
+      this.router.navigate(['products']);
     });
   }
 }

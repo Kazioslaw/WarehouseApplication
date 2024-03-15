@@ -74,8 +74,7 @@ namespace WarehouseApplication.Server.Controllers
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             _context.Product.Add(product);
-            await _context.SaveChangesAsync();
-
+            await _context.SaveChangesAsync();          
             return CreatedAtAction("GetProduct", new { id = product.ProductID }, product);
         }
 

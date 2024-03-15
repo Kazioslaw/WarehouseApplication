@@ -8,7 +8,6 @@ namespace WarehouseApplication.Server.Models
 	public class DeliveryDocument
 	{
 		[Key]
-		[JsonProperty("ID")]
 		public int DocumentID { get; set; }
         public bool IsApproved { get; set; } = false;
         public bool IsCancelled { get; set; } = false;
@@ -18,7 +17,7 @@ namespace WarehouseApplication.Server.Models
 
 		public ICollection<LabelDocument>? LabelDocuments { get; set; }
 
-        public ICollection<ProductList> Products { get; set; }
+        public ICollection<ProductList>? Products { get; set; }
 		
 		public int? StorehouseID { get; set; }
 		public Storehouse Storehouse { get; set; }

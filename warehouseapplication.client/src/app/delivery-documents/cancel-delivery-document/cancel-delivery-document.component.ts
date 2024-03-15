@@ -33,6 +33,10 @@ export class CancelDeliveryDocumentComponent {
     this.deliveryDocumentSerivce.cancelDeliveryDocument(id).subscribe(() => {
       console.log('Anulowano Dokument');
       this.router.navigate(['../..'], { relativeTo: this.activeRoute });
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) {
+        document.body.removeChild(backdrop);
+      }
     });
   }
   openModal(): void {

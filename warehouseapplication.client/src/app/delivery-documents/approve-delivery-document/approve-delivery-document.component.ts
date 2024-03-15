@@ -28,15 +28,6 @@ export class ApproveDeliveryDocumentComponent {
         this.deliveryDocumentDetails = data;
       });
   }
-
-  approveDocument(id: number): void {
-    this.deliveryDocumentSerivce.approveDeliveryDocument(id).subscribe(() => {
-      console.log('Document approved');
-      // Po zatwierdzeniu dokumentu, nawiguj z powrotem do poprzedniego widoku
-      this.router.navigate(['../..'], { relativeTo: this.activeRoute });
-    });
-  }
-
   openModal(): void {
     const modal = document.getElementById('approvalModal');
     if (modal) {
@@ -62,5 +53,17 @@ export class ApproveDeliveryDocumentComponent {
         document.body.removeChild(backdrop);
       }
     }
+  }
+
+  approveDocument(id: number): void {
+    this.deliveryDocumentSerivce.approveDeliveryDocument(id).subscribe(() => {
+      console.log('Document approved');
+      // Po zatwierdzeniu dokumentu, nawiguj z powrotem do poprzedniego widoku
+      this.router.navigate(['../..'], { relativeTo: this.activeRoute });
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) {
+        document.body.removeChild(backdrop);
+      }
+    });
   }
 }

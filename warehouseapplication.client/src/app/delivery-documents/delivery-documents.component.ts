@@ -16,4 +16,8 @@ export class DeliveryDocumentsComponent {
       .getDeliveryDocuments()
       .subscribe((data: DeliveryDocument[]) => (this.deliveryDocuments = data));
   }
+
+  logEdit() {
+    console.log('Button work');
+  }
 }
