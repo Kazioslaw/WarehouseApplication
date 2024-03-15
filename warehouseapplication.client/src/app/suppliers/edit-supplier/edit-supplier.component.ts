@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Supplier } from 'src/app/models/supplier';
 import { SuppliersService } from 'src/app/services/suppliers.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ToastService } from 'src/app/toaster/toast.service';
 
 @Component({
   selector: 'edit-supplier',
@@ -13,12 +15,14 @@ export class EditSupplierComponent {
   ID!: number;
   supplierDetails!: Supplier;
   editSupplierForm!: FormGroup;
+  private subscription!: Subscription;
 
   constructor(
     private suppliersService: SuppliersService,
     private activeRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {
     this.editSupplierForm = this.formBuilder.group({
       supplierID: undefined,
@@ -52,10 +56,21 @@ export class EditSupplierComponent {
   onSubmit() {
     if (this.editSupplierForm.valid) {
       const updatedSupplier: Supplier = this.editSupplierForm.value;
-      this.suppliersService.updateSupplier(updatedSupplier).subscribe(() => {
-        console.log('Supplier Updated'),
+      this.subscription = this.suppliersService
+        .updateSupplier(updatedSupplier, this.ID)
+        .subscribe(() => {
+          this.toast.show(
+            'Supplier successfully edited.',
+            'bg-success text-light'
+          );
           this.router.navigate(['suppliers']);
-      });
+        });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

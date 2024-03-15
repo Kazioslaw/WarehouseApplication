@@ -28,8 +28,8 @@ export class SuppliersService {
   }
 
   // Update
-  updateSupplier(supplier: Supplier): Observable<Supplier> {
-    const url = `${this.apiUrl}/${supplier.supplierID}`;
+  updateSupplier(supplier: Supplier, id: number): Observable<Supplier> {
+    const url = `${this.apiUrl}/${id}`;
     return this.http.put<Supplier>(url, supplier);
   }
 

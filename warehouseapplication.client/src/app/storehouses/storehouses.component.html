@@ -13,26 +13,17 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="storehouses.length; else noData">
-        <tr *ngFor="let storehouse of storehouses">
-          <td>
-            {{storehouse.storehouseID}}
-          </td>
-          <td>
-            {{storehouse.storehouseName}}
-          </td>
-          <td>
-            {{storehouse.storehouseSymbol}}
-          </td>
-        </tr>
-      </ng-container>
-      <ng-template #noData>
-        <tr>
-          <td>1</td>
-          <td>Magazyn Główny</td>
-          <td>Numer 1</td>
-        </tr>
-      </ng-template>
+      <tr *ngFor="let storehouse of storehouses">
+        <td>
+          {{storehouse.storehouseID}}
+        </td>
+        <td>
+          {{storehouse.storehouseName}}
+        </td>
+        <td>
+          {{storehouse.storehouseSymbol}}
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

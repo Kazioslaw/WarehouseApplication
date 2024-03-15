@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { ProductList } from 'src/app/models/product-list';
 import { DeliveryDocumentsService } from 'src/app/services/delivery-documents.service';
@@ -10,6 +10,8 @@ import { Storehouse } from 'src/app/models/storehouse';
 import { SuppliersService } from 'src/app/services/suppliers.service';
 import { StorehousesService } from 'src/app/services/storehouses.service';
 import { Label } from 'src/app/models/label';
+import { Subscription } from 'rxjs';
+import { ToastService } from 'src/app/toaster/toast.service';
 
 @Component({
   selector: 'edit-delivery-document',
@@ -25,43 +27,45 @@ export class EditDeliveryDocumentComponent {
   suppliers: Supplier[] = [];
   ID!: number;
   newProductList!: ProductList;
+  private subscription!: Subscription;
 
   constructor(
     private activeRoute: ActivatedRoute,
     private deliveryDocumentsService: DeliveryDocumentsService,
     private productsService: ProductsService,
     private storehousesService: StorehousesService,
-    private suppliersService: SuppliersService
+    private suppliersService: SuppliersService,
+    private toast: ToastService
   ) {}
   ngOnInit() {
     this.ID = parseInt(this.activeRoute.snapshot.paramMap.get('id') || '');
-    this.productsService
+    this.subscription = this.productsService
       .getProducts()
       .subscribe((data: Product[]) => (this.products = data));
 
-    this.deliveryDocumentsService
+    this.subscription = this.deliveryDocumentsService
       .getDeliveryDocumentByID(this.ID)
       .subscribe((data: DeliveryDocument) => {
         this.deliveryDocument = data;
         this.productsLists = data.products!;
       });
 
-    this.suppliersService.getSuppliers().subscribe((data: Supplier[]) => {
-      this.suppliers = data;
-    });
+    this.subscription = this.suppliersService
+      .getSuppliers()
+      .subscribe((data: Supplier[]) => {
+        this.suppliers = data;
+      });
 
-    this.storehousesService.getStorehouses().subscribe((data: Storehouse[]) => {
-      this.storehouses = data;
-    });
+    this.subscription = this.storehousesService
+      .getStorehouses()
+      .subscribe((data: Storehouse[]) => {
+        this.storehouses = data;
+      });
   }
 
   addLabel() {}
 
-  deleteLabel(id: number) {
-    console.log('Deleted ' + id);
-    // Usuwanie elementu z tabeli na podstawie ID
-    // this.items = this.items.filter((item) => item.id !== id);
-  }
+  deleteLabel(id: number) {}
 
   addProduct() {
     console.log('Added');
@@ -76,8 +80,15 @@ export class EditDeliveryDocumentComponent {
       product: { productName: '', productBarcode: '', productID: 0 },
     };
   }
+  deleteProduct(id: number) {}
 
-  deleteProduct(id: number) {
-    console.log('Deleted ' + id);
+  onSubmit() {
+    this.toast.show('Document successfully edited', 'bg-success text-light');
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

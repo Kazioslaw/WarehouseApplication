@@ -27,10 +27,12 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-secondary mx-1" routerLink="../..">
+    <button type="submit" class="btn btn-secondary mx-1" routerLink="..">
         Back to list
     </button>
     <button type="submit" class="btn btn-success mx-1" [disabled]="!productForm.valid">
         Submit
     </button>
 </form>
+
+<ng-template>Product added successfully</ng-template>

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { ProductsService } from 'src/app/services/products.service';
+import { ToastService } from 'src/app/toaster/toast.service';
 
 @Component({
   selector: 'delete-product',
@@ -11,10 +13,13 @@ import { ProductsService } from 'src/app/services/products.service';
 export class DeleteProductComponent {
   productDetails!: Product;
   ID!: number;
+  private subscription!: Subscription;
+
   constructor(
     private productsService: ProductsService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -25,10 +30,18 @@ export class DeleteProductComponent {
     });
   }
 
-  delete(id: number): void {
-    this.productsService.deleteProduct(id).subscribe(() => {
-      console.log('Product Deleted'), alert('Product deleted');
-      this.router.navigate(['products']);
+  onDelete(id: number): void {
+    this.subscription = this.productsService.deleteProduct(id).subscribe(() => {
+      this.toast.show('Product succesfully deleted', 'bg-danger text-light');
+      this.router.navigate(['products']);      
     });
+  }
+
+  showSuccessMessage() {}
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

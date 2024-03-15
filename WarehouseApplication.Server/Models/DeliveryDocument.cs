@@ -13,13 +13,13 @@ namespace WarehouseApplication.Server.Models
         public bool IsCancelled { get; set; } = false;
 
 		public int SupplierID { get; set;}
-		public Supplier Supplier { get; set; }
+		public Supplier? Supplier { get; set; }
 
 		public ICollection<LabelDocument>? LabelDocuments { get; set; }
 
         public ICollection<ProductList>? Products { get; set; }
 		
 		public int? StorehouseID { get; set; }
-		public Storehouse Storehouse { get; set; }
+		public Storehouse? Storehouse { get; set; }
 	}
 }

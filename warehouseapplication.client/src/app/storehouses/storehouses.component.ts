@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Storehouse } from '../models/storehouse';
 import { StorehousesService } from '../services/storehouses.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'storehouses',
@@ -10,11 +11,18 @@ import { StorehousesService } from '../services/storehouses.service';
 })
 export class StorehousesComponent {
   public storehouses: Storehouse[] = [];
+  private subscription!: Subscription;
   constructor(private storehousesService: StorehousesService) {}
 
   ngOnInit() {
-    this.storehousesService
+    this.subscription = this.storehousesService
       .getStorehouses()
       .subscribe((data: Storehouse[]) => (this.storehouses = data));
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

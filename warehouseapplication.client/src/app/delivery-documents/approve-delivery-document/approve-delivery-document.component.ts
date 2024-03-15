@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { DeliveryDocument } from 'src/app/models/delivery-document';
 import { DeliveryDocumentsService } from 'src/app/services/delivery-documents.service';
+import { ToastService } from 'src/app/toaster/toast.service';
 
 @Component({
   selector: 'approve-delivery-document',
@@ -11,11 +14,12 @@ import { DeliveryDocumentsService } from 'src/app/services/delivery-documents.se
 export class ApproveDeliveryDocumentComponent {
   deliveryDocumentDetails!: DeliveryDocument;
   documentID!: number;
-
+  private subscription!: Subscription;
   constructor(
     private deliveryDocumentSerivce: DeliveryDocumentsService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -56,14 +60,23 @@ export class ApproveDeliveryDocumentComponent {
   }
 
   approveDocument(id: number): void {
-    this.deliveryDocumentSerivce.approveDeliveryDocument(id).subscribe(() => {
-      console.log('Document approved');
-      // Po zatwierdzeniu dokumentu, nawiguj z powrotem do poprzedniego widoku
-      this.router.navigate(['../..'], { relativeTo: this.activeRoute });
-      const backdrop = document.querySelector('.modal-backdrop');
-      if (backdrop) {
-        document.body.removeChild(backdrop);
-      }
-    });
+    this.subscription = this.deliveryDocumentSerivce
+      .approveDeliveryDocument(id)
+      .subscribe(() => {
+        this.toast.show(
+          'Document successfully approved',
+          'bg-success text-light'
+        );
+        this.router.navigate(['../..'], { relativeTo: this.activeRoute });
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+          document.body.removeChild(backdrop);
+        }
+      });
+  }
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

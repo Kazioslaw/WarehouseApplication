@@ -28,8 +28,8 @@ export class ProductsService {
   }
 
   // Update
-  updateProduct(product: Product): Observable<Product> {
-    const url = `${this.apiUrl}/${product.productID}`;
+  updateProduct(product: Product, id: number): Observable<Product> {
+    const url = `${this.apiUrl}/${id}`;
     return this.http.put<Product>(url, product);
   }
 

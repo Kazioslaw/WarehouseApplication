@@ -31,9 +31,10 @@ export class DeliveryDocumentsService {
 
   // Update
   updateDeliveryDocument(
-    deliveryDocument: DeliveryDocument
+    deliveryDocument: DeliveryDocument,
+    id: number
   ): Observable<DeliveryDocument> {
-    const url = `${this.apiUrl}/${deliveryDocument.documentID}`;
+    const url = `${this.apiUrl}/${id}`;
     return this.http.put<DeliveryDocument>(url, deliveryDocument);
   }
 

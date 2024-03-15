@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { ProductsService } from 'src/app/services/products.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { ToastService } from 'src/app/toaster/toast.service';
 
 @Component({
   selector: 'edit-product',
@@ -13,12 +15,13 @@ export class EditProductComponent {
   ID!: number;
   productDetails!: Product;
   editProductForm!: FormGroup;
-
+  private subscription!: Subscription;
   constructor(
     private productsService: ProductsService,
     private activeRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {
     this.editProductForm = this.formBuilder.group({
       productID: undefined,
@@ -43,9 +46,21 @@ export class EditProductComponent {
   onSubmit() {
     if (this.editProductForm.valid) {
       const updatedProduct: Product = this.editProductForm.value;
-      this.productsService.updateProduct(updatedProduct).subscribe(() => {
-        console.log('product updated'), this.router.navigate(['products']);
-      });
+      this.subscription = this.productsService
+        .updateProduct(updatedProduct, this.ID)
+        .subscribe(() => {
+          this.toast.show(
+            'Product succesfully deleted',
+            'bg-success text-light'
+          ),
+            this.router.navigate(['products']);
+        });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

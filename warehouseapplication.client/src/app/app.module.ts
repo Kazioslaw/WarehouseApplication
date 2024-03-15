@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { StorehousesComponent } from './storehouses/storehouses.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
@@ -24,6 +23,9 @@ import { CancelDeliveryDocumentComponent } from './delivery-documents/cancel-del
 import { ApproveDeliveryDocumentComponent } from './delivery-documents/approve-delivery-document/approve-delivery-document.component';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbNav, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { Toaster } from './toaster/toaster.component';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -46,12 +48,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     ViewDeliveryDocumentComponent,
   ],
+  providers: [],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
+    NgbNavModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgbModule,
+    NgbToastModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'delivery-documents', component: DeliveryDocumentsComponent },
@@ -85,8 +90,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         component: CancelDeliveryDocumentComponent,
       },
     ]),
+    Toaster,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

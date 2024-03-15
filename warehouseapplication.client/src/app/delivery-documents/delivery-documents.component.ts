@@ -1,6 +1,7 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DeliveryDocument } from '../models/delivery-document';
 import { DeliveryDocumentsService } from '../services/delivery-documents.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'delivery-documents',
@@ -9,15 +10,18 @@ import { DeliveryDocumentsService } from '../services/delivery-documents.service
 })
 export class DeliveryDocumentsComponent {
   public deliveryDocuments: DeliveryDocument[] = [];
+  private subscription!: Subscription;
   constructor(private deliveryDocumentsService: DeliveryDocumentsService) {}
 
   ngOnInit() {
-    this.deliveryDocumentsService
+    this.subscription = this.deliveryDocumentsService
       .getDeliveryDocuments()
       .subscribe((data: DeliveryDocument[]) => (this.deliveryDocuments = data));
   }
 
-  logEdit() {
-    console.log('Button work');
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
