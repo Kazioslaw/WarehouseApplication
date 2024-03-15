@@ -49,8 +49,6 @@ export class ApproveDeliveryDocumentComponent {
     if (modal) {
       modal.classList.remove('show');
       modal.style.display = 'none';
-
-      // Usuń efekt rozmycia i zmniejszenia opacności tła
       document.body.classList.remove('modal-open');
       const backdrop = document.querySelector('.modal-backdrop');
       if (backdrop) {
@@ -67,7 +65,7 @@ export class ApproveDeliveryDocumentComponent {
           'Document successfully approved',
           'bg-success text-light'
         );
-        this.router.navigate(['../..'], { relativeTo: this.activeRoute });
+        this.router.navigate(['delivery-documents']);
         const backdrop = document.querySelector('.modal-backdrop');
         if (backdrop) {
           document.body.removeChild(backdrop);

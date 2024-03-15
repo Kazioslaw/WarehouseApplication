@@ -47,23 +47,39 @@
           <td>
             <ng-container *ngIf="!deliveryDocument.isApproved;else disabledButtons">
               <button type="button" title="view" class="btn btn-primary m-1 d-sm-inline"
-                routerLink="view/{{deliveryDocument.documentID}}"><i class="fa-solid fa-magnifying-glass"></i></button>
+                      routerLink="view/{{deliveryDocument.documentID}}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
               <button title="Edit disabled" type="button" disabled routerLink="edit/{{deliveryDocument.documentID}}"
-                class="btn btn-dark  d-sm-inline"><i class="fa-solid fa-edit"></i></button>
+                      class="btn btn-dark  d-sm-inline">
+                <i class="fa-solid fa-edit"></i>
+              </button>
               <button type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
-                class="btn btn-success m-1 d-sm-inline"><i class="fa-solid fa-check"></i></button>
+                      class="btn btn-success m-1 d-sm-inline">
+                <i class="fa-solid fa-check"></i>
+              </button>
               <button type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
-                class="btn btn-danger d-sm-inline"><i class="fa-solid fa-cancel"></i></button>
+                      class="btn btn-danger d-sm-inline">
+                <i class="fa-solid fa-cancel"></i>
+              </button>
             </ng-container>
             <ng-template #disabledButtons>
               <button type="button" title="view" class="btn btn-primary m-1 d-sm-inline"
-                routerLink="view/{{deliveryDocument.documentID}}"><i class="fa-solid fa-magnifying-glass"></i></button>
+                      routerLink="view/{{deliveryDocument.documentID}}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
               <button disabled type="button" title="edit" routerLink="edit/{{deliveryDocument.documentID}}"
-                class="btn btn-outline-dark d-sm-inline"><i class="fa-solid fa-edit"></i></button>
+                      class="btn btn-outline-dark d-sm-inline">
+                <i class="fa-solid fa-edit"></i>
+              </button>
               <button disabled type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
-                class="btn btn-outline-dark m-1 d-sm-inline"><i class="fa-solid fa-check"></i></button>
+                      class="btn btn-outline-dark m-1 d-sm-inline">
+                <i class="fa-solid fa-check"></i>
+              </button>
               <button disabled type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
-                class="btn btn-outline-dark d-sm-inline"><i class="fa-solid fa-cancel"></i></button>
+                      class="btn btn-outline-dark d-sm-inline">
+                <i class="fa-solid fa-cancel"></i>
+              </button>
             </ng-template>
           </td>
         </ng-container>
@@ -71,3 +87,5 @@
     </tbody>
   </table>
 </div>
+
+<toaster aria-live="polite" aria-atomic="true"></toaster>
