@@ -9,6 +9,6 @@ namespace WarehouseApplication.Server.Models
 		public int LabelID { get; set; }
 		public string LabelName { get; set; }
 
-		public ICollection<DeliveryDocument>? Documents { get; set; }
-	}
+        public ICollection<LabelDocument>? LabelDocuments { get; set; }
+    }
 }

@@ -1,0 +1,5 @@
+<ng-container *ngFor="let toast of toastService.toasts">
+    <ngb-toast [class]="toast.className" animation.show [autohide]="true" [delay]="toast.delay || 5000"
+        (hidden)="toastService.remove(toast)">{{ toast.body
+        }}</ngb-toast>
+</ng-container>

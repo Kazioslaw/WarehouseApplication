@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WarehouseApplication.Server.Models;
 
 namespace WarehouseApplication.Server.Data
@@ -14,11 +10,22 @@ namespace WarehouseApplication.Server.Data
         {
         }
 
-        public DbSet<DeliveryDocument> DeliveryDocument { get; set; } = default!;
+        public DbSet<DeliveryDocument> DeliveryDocument { get; set; }
         public DbSet<Label> Label { get; set; }
+        public DbSet<LabelDocument> LabelDocument { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ProductList> ProductList { get; set; }
         public DbSet<Storehouse> Storehouse { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
-    }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+            modelBuilder.Entity<LabelDocument>().HasKey(ld => new { ld.DocumentID, ld.LabelID });
+
+            modelBuilder.Entity<LabelDocument>().HasOne(ld => ld.Document).WithMany(d => d.LabelDocuments).HasForeignKey(ld => ld.DocumentID);
+            modelBuilder.Entity<LabelDocument>().HasOne(ld => ld.Label).WithMany(d => d.LabelDocuments).HasForeignKey(ld => ld.LabelID);
+
+            base.OnModelCreating(modelBuilder);
+		}
+	}
 }

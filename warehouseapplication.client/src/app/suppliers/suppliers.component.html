@@ -1,0 +1,48 @@
+<div *ngIf="suppliers">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <caption class="caption-top">
+      <h2 class="align-middle caption-top">Suppliers</h2>
+    </caption>
+    <button title="create" class="btn btn-primary" routerLink="add">Add</button>
+  </div>
+  <table class="table align-middle mb-0 bg-white caption-top button-top table-responsive-sm" *ngIf="suppliers">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>Zipcode</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let supplier of suppliers; let id = index">
+        <td>
+          {{id+1}}
+        </td>
+        <td>
+          {{supplier.supplierName}}
+        </td>
+        <td>
+          {{supplier.supplierAddress}}
+        </td>
+        <td>
+          {{supplier.supplierCity}}
+        </td>
+        <td>
+          {{supplier.supplierZipcode}}
+        </td>
+        <td>
+          <button title="edit" routerLink="edit/{{supplier.supplierID}}" class="btn btn-secondary"><i
+              class="fa-solid fa-edit"></i></button>
+          <button title="delete" routerLink="delete/{{supplier.supplierID}}" class="btn btn-danger m-1"><i
+              class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<toaster aria-live="polite" aria-atomic="true"></toaster>

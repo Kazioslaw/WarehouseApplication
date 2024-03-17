@@ -1,5 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Humanizer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json;
+using NuGet.Common;
+using NuGet.Versioning;
 using WarehouseApplication.Server.Data;
 using WarehouseApplication.Server.Models;
 
@@ -16,60 +26,129 @@ namespace WarehouseApplication.Server.Controllers
             _context = context;
         }
 
-        // GET: api/DeliveryDocuments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DeliveryDocument>>> GetDeliveryDocument()
         {
-            return await _context.DeliveryDocument.ToListAsync();
+            var deliveryDocuments = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
+                                                                    .ThenInclude(ld => ld.Label)
+                                                                  .Include(dd => dd.ProductLists)
+                                                                    .ThenInclude(p => p.Product)
+                                                                  .Include(dd => dd.Storehouse)
+                                                                  .Include(dd => dd.Supplier).ToListAsync();
+
+            var simplyfiedDocument = deliveryDocuments.Select(dd => new
+            {
+                dd.DocumentID,
+                dd.IsApproved,
+                dd.IsCancelled,
+                SupplierInfo = new
+                {
+                    SupplierID = dd.Supplier?.SupplierID,
+                    SupplierName = dd.Supplier?.SupplierName,
+                    SupplierAddress = dd.Supplier?.SupplierAddress,
+                    SupplierCity = dd.Supplier?.SupplierCity,
+                    SupplierZipcode = dd.Supplier?.SupplierZipcode,
+                },
+                Labels = dd.LabelDocuments.Select(ld => new
+                {
+                    LabelID = ld.LabelID,
+                    LabelName = ld.Label?.LabelName
+                }),
+                Products = dd.ProductLists.Select(pl => new
+                {
+                    ListID = pl.ListID,
+                    DocumentID = pl.DocumentID,
+                    ProductID = pl.ProductID,
+                    ProductName = pl.Product?.ProductName,
+                    ProductBarcode = pl.Product?.ProductBarcode,
+                    Quantity = pl.Quantity,
+                    Price = pl.Price,
+                }),
+                StorehouseInfo = new
+                {
+                    StorehouseID = dd.Storehouse?.StorehouseID,
+                    StorehouseName = dd.Storehouse?.StorehouseName,
+                    StorehouseSymbol = dd.Storehouse?.StorehouseSymbol,
+                }
+            });
+
+            return Ok(simplyfiedDocument);
         }
 
-        // GET: api/DeliveryDocuments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DeliveryDocument>> GetDeliveryDocument(int id)
         {
-            var deliveryDocument = await _context.DeliveryDocument.FindAsync(id);
+            var deliveryDocument = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
+                                                                    .ThenInclude(ld => ld.Label)
+                                                                  .Include(dd => dd.ProductLists)
+                                                                    .ThenInclude(p => p.Product)
+                                                                  .Include(dd => dd.Storehouse)
+                                                                  .Include(dd => dd.Supplier)
+                                                                  .SingleOrDefaultAsync(dd=> dd.DocumentID == id);
+            var simplyfiedDocument = new
+            {
+                deliveryDocument.DocumentID,
+                deliveryDocument.IsApproved,
+                deliveryDocument.IsCancelled,
+                SupplierInfo = new
+                {
+                    SupplierID = deliveryDocument.Supplier?.SupplierID,
+                    SupplierName = deliveryDocument.Supplier?.SupplierName,
+                    SupplierAddress = deliveryDocument.Supplier?.SupplierAddress,
+                    SupplierCity = deliveryDocument.Supplier?.SupplierCity,
+                    SupplierZipcode = deliveryDocument.Supplier?.SupplierZipcode,
+                },
+                Labels = deliveryDocument.LabelDocuments.Select(ld => new
+                {
+                    LabelID = ld.LabelID,
+                    LabelName = ld.Label?.LabelName
+                }),
+                Products = deliveryDocument.ProductLists.Select(pl => new
+                {
+                    ListID = pl.ListID,
+                    DocumentID = pl.DocumentID,
+                    ProductID = pl.ProductID,
+                    ProductName = pl.Product?.ProductName,
+                    ProductBarcode = pl.Product?.ProductBarcode,
+                    Quantity = pl.Quantity,
+                    Price = pl.Price,
+                }),
+                StorehouseInfo = new
+                {
+                    StorehouseID = deliveryDocument.Storehouse?.StorehouseID,
+                    StorehouseName = deliveryDocument.Storehouse?.StorehouseName,
+                    StorehouseSymbol = deliveryDocument.Storehouse?.StorehouseSymbol,
+                }
+            };                                                                
 
-            if (deliveryDocument == null)
+            if(!DeliveryDocumentExists(id))
             {
                 return NotFound();
-            }
+            }     
 
-            return deliveryDocument;
+            return Ok(simplyfiedDocument);
         }
 
-        // PUT: api/DeliveryDocuments/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeliveryDocument(int id, DeliveryDocument deliveryDocument)
         {
-            if (id != deliveryDocument.DocumentID)
+            string json = JsonConvert.SerializeObject(deliveryDocument);
+            string jsonFile = @"E:\Json\test.json";
+            using (StreamWriter writer = new StreamWriter(jsonFile, append: true))
             {
-                return BadRequest();
+                writer.WriteLine(json);
             }
 
-            _context.Entry(deliveryDocument).State = EntityState.Modified;
-
-            try
+            if (_context.Supplier.Any(s => s.SupplierID != deliveryDocument.SupplierID))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DeliveryDocumentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                BadRequest("Supplier ID not found in database");
             }
 
-            return NoContent();
+            _context.DeliveryDocument.Update(deliveryDocument);
+            _context.SaveChanges();
+            return Ok();
         }
 
-        // POST: api/DeliveryDocuments
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<DeliveryDocument>> PostDeliveryDocument(DeliveryDocument deliveryDocument)
         {
@@ -79,59 +158,43 @@ namespace WarehouseApplication.Server.Controllers
             return CreatedAtAction("GetDeliveryDocument", new { id = deliveryDocument.DocumentID }, deliveryDocument);
         }
 
-        // DELETE: api/DeliveryDocuments/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDeliveryDocument(int id)
+
+        [HttpPut("Approve/{id}")]
+        public async Task<IActionResult> ApproveDeliveryDocument(int id)
         {
             var deliveryDocument = await _context.DeliveryDocument.FindAsync(id);
-            if (deliveryDocument == null)
+
+            if (!DeliveryDocumentExists(id))
             {
                 return NotFound();
             }
 
-            _context.DeliveryDocument.Remove(deliveryDocument);
-            await _context.SaveChangesAsync();
+            deliveryDocument.IsApproved = true;
 
-            return NoContent();
+            await _context.SaveChangesAsync();
+            return Ok();
         }
+
+        [HttpPut("Cancel/{id}")]
+        public async Task<IActionResult> CancelDeliveryDocument(int id)
+        {
+            var deliveryDocument = await _context.DeliveryDocument.FindAsync(id);
+
+            if (!DeliveryDocumentExists(id))
+            {
+                return NotFound();
+            }
+
+            deliveryDocument.IsCancelled = true;
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
 
         private bool DeliveryDocumentExists(int id)
         {
             return _context.DeliveryDocument.Any(e => e.DocumentID == id);
-        }
-
-        [HttpPost("Approval/{id}")]
-        public async Task<IActionResult> DocumentApproval(int id, bool change)
-        {
-            var deliveryDocument = await _context.DeliveryDocument.FindAsync(id);
-            if (deliveryDocument == null)
-            {
-                return NotFound();
-            }
-            if(deliveryDocument.IsApproved != change)
-            {
-                deliveryDocument.IsApproved = change;
-            }
-            _context.Update(deliveryDocument);
-            await _context.SaveChangesAsync(change);
-            return NoContent();
-        }
-
-        [HttpPost("Cancelation/{id}")]
-        public async Task<IActionResult> DocumentCancelation(int id, bool change)
-        {
-            var deliveryDocument = await _context.DeliveryDocument.FindAsync(id);
-            if(deliveryDocument == null)
-            {
-                return NotFound();
-            }
-            if(deliveryDocument.IsCancelled != change)
-            {
-                deliveryDocument.IsCancelled = change;
-            }
-            _context.Update(deliveryDocument);
-            await _context.SaveChangesAsync(change);
-            return NoContent();
         }
     }
 }

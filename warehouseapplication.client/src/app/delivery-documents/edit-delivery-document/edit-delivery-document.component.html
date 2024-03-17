@@ -1,0 +1,178 @@
+<div *ngIf="deliveryDocument">
+    <h2 class="my-3">Editing document</h2>
+
+    <form (formGroup)="editDocumentForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3 row">
+            <label for="name" class="col-sm-2 col-form-label"><strong>Document ID: </strong></label>
+            <div class="col-auto">
+                <input type="text" title="name" value="{{deliveryDocument.documentID}}" disabled class="form-control"
+                    id="name">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="supplier" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
+            <div class="col-auto">
+                <select title="Select supplier by name" class='form-select' [(ngModel)]="deliveryDocument.supplierID"
+                    name="supplier">
+                    <ng-container *ngFor="let supplier of suppliers">
+                        <option *ngIf="supplier.supplierName !== deliveryDocument.supplierInfo?.supplierName">
+                            {{supplier.supplierName}}</option>
+                    </ng-container>
+                    <option value="{{ deliveryDocument.supplierInfo?.supplierID }}" selected>
+                        {{deliveryDocument.supplierInfo?.supplierName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="storehouse" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
+            <div class="col-auto">
+                <select title="Select storehouse by name" class='form-select'
+                    [(ngModel)]="deliveryDocument.storehouseID" name="storehouse">
+                    <option value="{{deliveryDocument.storehouseInfo?.storehouseName}}">
+                        {{deliveryDocument.storehouseInfo?.storehouseName}}</option>
+                    <ng-container *ngFor="let storehouse of storehouses">
+                        <option *ngIf="storehouse.storehouseName !== deliveryDocument.storehouseInfo?.storehouseName">
+                            {{storehouse.storehouseName}}</option>
+                    </ng-container>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="labelList" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
+            <div class="col-sm-3">
+                <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm">
+                    <thead class=" table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let label of deliveryDocument.labels">
+                        <tr>
+                            <td>
+                                <div>
+                                    {{label.labelName}}
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" title="Delete row" class="btn btn-outline-danger pe-auto border-0"
+                                    (click)="onDeleteLabel(label.labelID)"><i class="fa fa-xl fa-xmark"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control m-2" placeholder="Enter label...">
+                                <datalist list="label">
+                                    <option id="label" *ngFor="let label of labelList" value="{{label.labelName}}">
+                                </datalist>
+                            <td>
+                                <div class="btn-group mx-1">
+                                    <button type="button" (click)="onAddLabel()" title="Add new"
+                                        class="btn btn-outline-success border-0 pe-auto"><i
+                                            class="fa fa-xl fa-add"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="productList" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
+            <div class="col-sm-9">
+                <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class='col-sm-3'>Name</th>
+                            <th class="col-sm-3">Barcode</th>
+                            <th class="col-sm-2">Qty</th>
+                            <th class="col-sm-2">Price</th>
+                            <th class="col-sm-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let productList of productLists; let i = index">
+                        <tr>
+                            <td>{{productList.productName}}</td>
+                            <td>{{productList.productBarcode}}</td>
+                            <td>
+                                <div *ngIf="productList.isEdit"><input type="number" min="1" max="5000000"
+                                        class="form-control m-2" [(ngModel)]="productList.quantity" name="quantity">
+                                </div>
+                                <div *ngIf="!productList.isEdit">{{productList.quantity}}
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="!productList.isEdit">{{productList.price|currency}}</div>
+                                <div *ngIf="productList.isEdit">
+                                    <div class=" input-group m-2">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" step="0.01" min="0" max="5000000"
+                                            [(ngModel)]="productList.price" class="form-control" name="price">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="!productList.isEdit; else editingButtons">
+                                    <button type="button" title="edit row"
+                                        class="btn btn-outline-secondary pe-auto border-0"
+                                        (click)="onEdit(productList)"><i class="fa fa-xl fa-pencil"></i></button>
+                                    <button type="button" title="Delete row"
+                                        class="btn btn-outline-danger pe-auto border-0"
+                                        (click)="onDeleteProduct(i)"><i
+                                            class="fa fa-xl fa-xmark"></i></button>
+                                </ng-container>
+                                <ng-template #editingButtons>
+                                    <button type="button" title="save edited"
+                                        class="btn btn-outline-success pe-auto border-0"
+                                        (click)="onUpdate(productList)"><i
+                                            class="fa fa-xl fa-check-square"></i></button>
+                                    <button type="button" title="Cancel editing"
+                                        class="btn btn-outline-danger pe-auto border-0" (click)="onCancel(productList)">
+                                        <i class="fa fa-xl fa-xmark-square"></i>
+                                    </button>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <select title="Select product and Barcode" class="form-select"
+                                    [(ngModel)]="newProduct.productID" name="productID">
+                                    <ng-container *ngFor="let product of products">
+                                        <option [ngValue]="product.productID">
+                                            {{product.productName}}</option>
+                                    </ng-container>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" min="1" class="form-control m-2" placeholder="1"
+                                    [(ngModel)]="newProduct.quantity" name="quantity">
+                            </td>
+                            <td>
+                                <div class="input-group m-2">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" min="0" class="form-control" placeholder="0.00"
+                                        [(ngModel)]="newProduct.price" name="price">
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" (click)="onAddProduct()" title="Add new"
+                                    class="btn btn-outline-success border-0 pe-auto"><i
+                                        class="fa fa-xl fa-add"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+            Back to list
+        </button>
+        <button type="submit" class="btn btn-success mx-1">
+            Submit
+        </button>
+    </form>

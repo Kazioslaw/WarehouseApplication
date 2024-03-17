@@ -20,7 +20,7 @@ namespace WarehouseApplication.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
         {
-            return await _context.Product.ToListAsync();
+            return Ok(await _context.Product.ToListAsync());
         }
 
         // GET: api/Products/5
@@ -34,7 +34,7 @@ namespace WarehouseApplication.Server.Controllers
                 return NotFound();
             }
 
-            return product;
+            return Ok(product);
         }
 
         // PUT: api/Products/5
@@ -65,7 +65,7 @@ namespace WarehouseApplication.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Products
@@ -74,8 +74,7 @@ namespace WarehouseApplication.Server.Controllers
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             _context.Product.Add(product);
-            await _context.SaveChangesAsync();
-
+            await _context.SaveChangesAsync();          
             return CreatedAtAction("GetProduct", new { id = product.ProductID }, product);
         }
 
@@ -92,7 +91,7 @@ namespace WarehouseApplication.Server.Controllers
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         private bool ProductExists(int id)

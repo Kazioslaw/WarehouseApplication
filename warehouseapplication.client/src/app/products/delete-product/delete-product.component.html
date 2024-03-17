@@ -1,0 +1,25 @@
+<div *ngIf="productDetails">
+    <h2 class="my-3">Deleting product</h2>
+    <form>
+        <div class="mb-3 row">
+            <label for="staticName" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
+            <div class="col-sm-8">
+                <input type="text" disabled title="name" value="{{productDetails.productName}}" class="form-control"
+                    id="statiName">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="staticStreet" class="col-sm-2 col-form-label"><strong>Barcode: </strong></label>
+            <div class="col-sm-8">
+                <input type="text" disabled title="street" value="{{productDetails.productBarcode}}"
+                    class="form-control" id="staticStreet">
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+            Back to list
+        </button>
+        <button type="submit" class="btn btn-danger mx-1" (click)="onDelete(productDetails.productID)">
+            Delete
+        </button>
+    </form>
+</div>

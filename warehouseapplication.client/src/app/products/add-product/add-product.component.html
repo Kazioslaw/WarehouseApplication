@@ -1,0 +1,36 @@
+<h2 class="my-3">Add product</h2>
+<form #productForm="ngForm" (ngSubmit)="saveProduct()">
+    <div class="mb-3 row">
+        <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
+        <div class="col-sm-8">
+            <input type="text" [(ngModel)]="newProduct.productName" class="form-control" id="name" name="name" required
+                minlength="3" placeholder="Enter name">
+            <div class="text-danger"
+                *ngIf="productForm.controls['name']?.touched && productForm.controls['name']?.hasError('required')">
+                Name required</div>
+            <div class="text-danger"
+                *ngIf="productForm.controls['name']?.touched && productForm.controls['name']?.hasError('minlength')">
+                Name must have at least 3 characters</div>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="barcode" class="col-sm-2 col-form-label"><strong>Barcode: </strong></label>
+        <div class="col-sm-8">
+            <input type="text" title="barcode" [(ngModel)]="newProduct.productBarcode" class="form-control" id="barcode"
+                name="barcode" required minlength="3" maxlength="48" placeholder="Enter barcode">
+            <div class="text-danger"
+                *ngIf="productForm.controls['barcode']?.touched && productForm.controls['barcode']?.hasError('required')">
+                Barcode required</div>
+            <div class="text-danger"
+                *ngIf="productForm.controls['barcode']?.touched  && productForm.controls['barcode']?.hasError('minlength') || productForm.controls['barcode']?.hasError('maxlength')">
+                Length of barcode should be between 3 and 48 characters</div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-secondary mx-1" routerLink="..">
+        Back to list
+    </button>
+    <button type="submit" class="btn btn-success mx-1" [disabled]="!productForm.valid">
+        Submit
+    </button>
+</form>

@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarehouseApplication.Server.Data;
 using WarehouseApplication.Server.Models;
@@ -20,7 +25,7 @@ namespace WarehouseApplication.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSupplier()
         {
-            return await _context.Supplier.ToListAsync();
+            return Ok(await _context.Supplier.ToListAsync());
         }
 
         // GET: api/Suppliers/5
@@ -34,7 +39,7 @@ namespace WarehouseApplication.Server.Controllers
                 return NotFound();
             }
 
-            return supplier;
+            return Ok(supplier);
         }
 
         // PUT: api/Suppliers/5
@@ -65,7 +70,7 @@ namespace WarehouseApplication.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Suppliers
@@ -92,7 +97,7 @@ namespace WarehouseApplication.Server.Controllers
             _context.Supplier.Remove(supplier);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         private bool SupplierExists(int id)
