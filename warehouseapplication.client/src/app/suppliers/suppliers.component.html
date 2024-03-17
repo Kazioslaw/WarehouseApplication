@@ -5,7 +5,7 @@
     </caption>
     <button title="create" class="btn btn-primary" routerLink="add">Add</button>
   </div>
-  <table class="table align-middle mb-0 bg-white caption-top button-top" *ngIf="suppliers">
+  <table class="table align-middle mb-0 bg-white caption-top button-top table-responsive-sm" *ngIf="suppliers">
     <thead class="table-dark">
       <tr>
         <th>ID</th>
@@ -18,9 +18,9 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let supplier of suppliers">
+      <tr *ngFor="let supplier of suppliers; let id = index">
         <td>
-          {{supplier.supplierID}}
+          {{id+1}}
         </td>
         <td>
           {{supplier.supplierName}}

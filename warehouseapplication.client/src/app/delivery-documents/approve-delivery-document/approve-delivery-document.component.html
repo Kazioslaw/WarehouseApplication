@@ -12,7 +12,7 @@
             <label for="staticSupplierName" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
             <div class="col-sm-auto">
                 <input type="text" disabled title="supplierName"
-                    value="{{deliveryDocumentDetails.supplier?.supplierName}}" class="form-control"
+                    value="{{deliveryDocumentDetails.supplierInfo?.supplierName}}" class="form-control"
                     id="staticSupplierName">
             </div>
         </div>
@@ -20,7 +20,7 @@
             <label for="staticStorehouseName" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
             <div class="col-sm-auto">
                 <input type="text" disabled title="storehouseName"
-                    value="{{deliveryDocumentDetails.storehouse?.storehouseName}}" class="form-control"
+                    value="{{deliveryDocumentDetails.storehouseInfo?.storehouseName}}" class="form-control"
                     id="staticStorehouseName">
             </div>
         </div>
@@ -40,10 +40,9 @@
                             <th>Label Name</th>
                         </tr>
                     </thead>
-                    <tbody class="table-responsive-sm"
-                        *ngFor="let labelDocument of deliveryDocumentDetails.labelDocuments">
+                    <tbody class="table-responsive-sm" *ngFor="let labelDocument of deliveryDocumentDetails.labels">
                         <tr>
-                            <td>{{labelDocument.label?.labelName}}</td>
+                            <td>{{labelDocument.labelName}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,8 +62,8 @@
                     </thead>
                     <tbody class="table-responsive-sm" *ngFor="let productsList of deliveryDocumentDetails.products">
                         <tr>
-                            <td>{{productsList.product?.productName}}</td>
-                            <td>{{productsList.product?.productBarcode}}</td>
+                            <td>{{productsList.productName}}</td>
+                            <td>{{productsList.productBarcode}}</td>
                             <td>{{productsList.quantity}}</td>
                             <td>{{productsList.price}}</td>
                         </tr>

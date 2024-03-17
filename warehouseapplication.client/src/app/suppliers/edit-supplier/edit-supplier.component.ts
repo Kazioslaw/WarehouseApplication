@@ -61,7 +61,7 @@ export class EditSupplierComponent {
         .subscribe(() => {
           this.toast.show(
             'Supplier successfully edited.',
-            'bg-success text-light'
+            'bg-success text-light animation'
           );
           this.router.navigate(['suppliers']);
         });

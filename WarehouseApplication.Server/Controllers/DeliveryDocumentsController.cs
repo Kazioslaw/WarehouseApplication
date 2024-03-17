@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json;
 using NuGet.Common;
+using NuGet.Versioning;
 using WarehouseApplication.Server.Data;
 using WarehouseApplication.Server.Models;
 
@@ -29,12 +31,48 @@ namespace WarehouseApplication.Server.Controllers
         {
             var deliveryDocuments = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
                                                                     .ThenInclude(ld => ld.Label)
-                                                                  .Include(dd => dd.Products)
+                                                                  .Include(dd => dd.ProductLists)
                                                                     .ThenInclude(p => p.Product)
                                                                   .Include(dd => dd.Storehouse)
                                                                   .Include(dd => dd.Supplier).ToListAsync();
 
-            return deliveryDocuments;
+            var simplyfiedDocument = deliveryDocuments.Select(dd => new
+            {
+                dd.DocumentID,
+                dd.IsApproved,
+                dd.IsCancelled,
+                SupplierInfo = new
+                {
+                    SupplierID = dd.Supplier?.SupplierID,
+                    SupplierName = dd.Supplier?.SupplierName,
+                    SupplierAddress = dd.Supplier?.SupplierAddress,
+                    SupplierCity = dd.Supplier?.SupplierCity,
+                    SupplierZipcode = dd.Supplier?.SupplierZipcode,
+                },
+                Labels = dd.LabelDocuments.Select(ld => new
+                {
+                    LabelID = ld.LabelID,
+                    LabelName = ld.Label?.LabelName
+                }),
+                Products = dd.ProductLists.Select(pl => new
+                {
+                    ListID = pl.ListID,
+                    DocumentID = pl.DocumentID,
+                    ProductID = pl.ProductID,
+                    ProductName = pl.Product?.ProductName,
+                    ProductBarcode = pl.Product?.ProductBarcode,
+                    Quantity = pl.Quantity,
+                    Price = pl.Price,
+                }),
+                StorehouseInfo = new
+                {
+                    StorehouseID = dd.Storehouse?.StorehouseID,
+                    StorehouseName = dd.Storehouse?.StorehouseName,
+                    StorehouseSymbol = dd.Storehouse?.StorehouseSymbol,
+                }
+            });
+
+            return Ok(simplyfiedDocument);
         }
 
         [HttpGet("{id}")]
@@ -42,47 +80,73 @@ namespace WarehouseApplication.Server.Controllers
         {
             var deliveryDocument = await _context.DeliveryDocument.Include(dd => dd.LabelDocuments)
                                                                     .ThenInclude(ld => ld.Label)
-                                                                  .Include(dd=> dd.Products)
+                                                                  .Include(dd => dd.ProductLists)
                                                                     .ThenInclude(p => p.Product)
                                                                   .Include(dd => dd.Storehouse)
                                                                   .Include(dd => dd.Supplier)
-                                                                  .SingleOrDefaultAsync(dd => dd.DocumentID == id);
+                                                                  .SingleOrDefaultAsync(dd=> dd.DocumentID == id);
+            var simplyfiedDocument = new
+            {
+                deliveryDocument.DocumentID,
+                deliveryDocument.IsApproved,
+                deliveryDocument.IsCancelled,
+                SupplierInfo = new
+                {
+                    SupplierID = deliveryDocument.Supplier?.SupplierID,
+                    SupplierName = deliveryDocument.Supplier?.SupplierName,
+                    SupplierAddress = deliveryDocument.Supplier?.SupplierAddress,
+                    SupplierCity = deliveryDocument.Supplier?.SupplierCity,
+                    SupplierZipcode = deliveryDocument.Supplier?.SupplierZipcode,
+                },
+                Labels = deliveryDocument.LabelDocuments.Select(ld => new
+                {
+                    LabelID = ld.LabelID,
+                    LabelName = ld.Label?.LabelName
+                }),
+                Products = deliveryDocument.ProductLists.Select(pl => new
+                {
+                    ListID = pl.ListID,
+                    DocumentID = pl.DocumentID,
+                    ProductID = pl.ProductID,
+                    ProductName = pl.Product?.ProductName,
+                    ProductBarcode = pl.Product?.ProductBarcode,
+                    Quantity = pl.Quantity,
+                    Price = pl.Price,
+                }),
+                StorehouseInfo = new
+                {
+                    StorehouseID = deliveryDocument.Storehouse?.StorehouseID,
+                    StorehouseName = deliveryDocument.Storehouse?.StorehouseName,
+                    StorehouseSymbol = deliveryDocument.Storehouse?.StorehouseSymbol,
+                }
+            };                                                                
 
             if(!DeliveryDocumentExists(id))
             {
                 return NotFound();
             }     
 
-            return Ok(deliveryDocument);
+            return Ok(simplyfiedDocument);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeliveryDocument(int id, DeliveryDocument deliveryDocument)
         {
-            if (id != deliveryDocument.DocumentID)
+            string json = JsonConvert.SerializeObject(deliveryDocument);
+            string jsonFile = @"E:\Json\test.json";
+            using (StreamWriter writer = new StreamWriter(jsonFile, append: true))
             {
-                return BadRequest();
+                writer.WriteLine(json);
             }
 
-            _context.Entry(deliveryDocument).State = EntityState.Modified;
-
-            try
+            if (_context.Supplier.Any(s => s.SupplierID != deliveryDocument.SupplierID))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DeliveryDocumentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                BadRequest("Supplier ID not found in database");
             }
 
-            return NoContent();
+            _context.DeliveryDocument.Update(deliveryDocument);
+            _context.SaveChanges();
+            return Ok();
         }
 
         [HttpPost]
@@ -94,10 +158,6 @@ namespace WarehouseApplication.Server.Controllers
             return CreatedAtAction("GetDeliveryDocument", new { id = deliveryDocument.DocumentID }, deliveryDocument);
         }
 
-        private bool DeliveryDocumentExists(int id)
-        {
-            return _context.DeliveryDocument.Any(e => e.DocumentID == id);
-        }
 
         [HttpPut("Approve/{id}")]
         public async Task<IActionResult> ApproveDeliveryDocument(int id)
@@ -129,6 +189,12 @@ namespace WarehouseApplication.Server.Controllers
 
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+
+        private bool DeliveryDocumentExists(int id)
+        {
+            return _context.DeliveryDocument.Any(e => e.DocumentID == id);
         }
     }
 }

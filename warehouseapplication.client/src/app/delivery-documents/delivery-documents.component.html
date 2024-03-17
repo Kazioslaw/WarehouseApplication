@@ -5,7 +5,7 @@
       <h2 class="align-middle caption-top">Delivery Documents</h2>
     </caption><button class="btn btn-primary" disabled routerLink="add">Add</button>
   </div>
-  <table class="table align-middle mb-0 bg-white caption-top" *ngIf="deliveryDocuments">
+  <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm" *ngIf="deliveryDocuments">
     <thead class="table-dark">
       <tr>
         <th>ID</th>
@@ -17,20 +17,20 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody *ngFor="let deliveryDocument of deliveryDocuments">
+    <tbody *ngFor="let deliveryDocument of deliveryDocuments;let i = index">
       <tr>
-        <ng-container *ngIf="!deliveryDocument.isCancelled">
+        <ng-container *ngIf="!deliveryDocument.isCancelled;">
           <td>
-            {{deliveryDocument.documentID}}
+            {{i+1}}
           </td>
           <td>
-            {{deliveryDocument.supplier?.supplierName}}
+            {{deliveryDocument.supplierInfo?.supplierName}}
           </td>
           <td>
-            {{deliveryDocument.storehouse?.storehouseName ?? "Brak danych"}}
+            {{deliveryDocument.storehouseInfo?.storehouseName ?? "Brak danych"}}
           </td>
           <td>
-            <div *ngFor="let labelDocument of deliveryDocument.labelDocuments">
+            <div *ngFor="let labelDocument of deliveryDocument.labels">
               {{
               labelDocument.label?.labelName
               }}
@@ -47,37 +47,37 @@
           <td>
             <ng-container *ngIf="!deliveryDocument.isApproved;else disabledButtons">
               <button type="button" title="view" class="btn btn-primary m-1 d-sm-inline"
-                      routerLink="view/{{deliveryDocument.documentID}}">
+                routerLink="view/{{deliveryDocument.documentID}}">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
               <button title="Edit disabled" type="button" disabled routerLink="edit/{{deliveryDocument.documentID}}"
-                      class="btn btn-dark  d-sm-inline">
+                class="btn btn-dark  d-sm-inline">
                 <i class="fa-solid fa-edit"></i>
               </button>
               <button type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
-                      class="btn btn-success m-1 d-sm-inline">
+                class="btn btn-success m-1 d-sm-inline">
                 <i class="fa-solid fa-check"></i>
               </button>
               <button type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
-                      class="btn btn-danger d-sm-inline">
+                class="btn btn-danger d-sm-inline">
                 <i class="fa-solid fa-cancel"></i>
               </button>
             </ng-container>
             <ng-template #disabledButtons>
               <button type="button" title="view" class="btn btn-primary m-1 d-sm-inline"
-                      routerLink="view/{{deliveryDocument.documentID}}">
+                routerLink="view/{{deliveryDocument.documentID}}">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
               <button disabled type="button" title="edit" routerLink="edit/{{deliveryDocument.documentID}}"
-                      class="btn btn-outline-dark d-sm-inline">
+                class="btn btn-outline-dark d-sm-inline">
                 <i class="fa-solid fa-edit"></i>
               </button>
               <button disabled type="button" title="approve" routerLink="approve/{{deliveryDocument.documentID}}"
-                      class="btn btn-outline-dark m-1 d-sm-inline">
+                class="btn btn-outline-dark m-1 d-sm-inline">
                 <i class="fa-solid fa-check"></i>
               </button>
               <button disabled type="button" title="cancel" routerLink="cancel/{{deliveryDocument.documentID}}"
-                      class="btn btn-outline-dark d-sm-inline">
+                class="btn btn-outline-dark d-sm-inline">
                 <i class="fa-solid fa-cancel"></i>
               </button>
             </ng-template>

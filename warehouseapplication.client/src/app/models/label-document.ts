@@ -4,6 +4,7 @@ import { Label } from './label';
 export interface LabelDocument {
   labelID: number;
   label?: Label;
-  documentID: number;
+  labelName: string;
+  documentID?: number;
   document?: DeliveryDocument;
 }

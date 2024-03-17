@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/toaster/toast.service';
   styleUrls: ['./edit-product.component.css'],
 })
 export class EditProductComponent {
-  ID!: number;
+  private ID!: number;
   productDetails!: Product;
   editProductForm!: FormGroup;
   private subscription!: Subscription;

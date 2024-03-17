@@ -1,11 +1,12 @@
 <h2 class="my-3">Adding new document</h2>
-<form>
+<form #documentForm="ngForm">
     <div class="mb-3 row">
         <label for="supplier" class="col-sm-2 col-form-label"><strong>Supplier: </strong></label>
         <div class="col-auto">
-            <select placeholder="Select supplier" title="Select supplier by name" class='form-select'>
+            <select title="Select supplier by name" class='form-select' [(ngModel)]="newDocument.supplierID"
+                name="supplier">
                 <ng-container *ngFor="let supplier of suppliersList">
-                    <option>{{supplier.supplierName}}</option>
+                    <option [ngValue]="supplier.supplierID">{{supplier.supplierName}}</option>
                 </ng-container>
             </select>
         </div>
@@ -13,9 +14,10 @@
     <div class="mb-3 row">
         <label for="storehouse" class="col-sm-2 col-form-label"><strong>Storehouse: </strong></label>
         <div class="col-auto">
-            <select title="Select storehouse by name" class='form-select'>
+            <select title="Select storehouse by name" class='form-select' [(ngModel)]="newDocument.storehouseID"
+                name="storehouse">
                 <ng-container *ngFor="let storehouse of storehousesList">
-                    <option>{{storehouse.storehouseName}}</option>
+                    <option [ngValue]="storehouse.storehouseID">{{storehouse.storehouseName}}</option>
                 </ng-container>
             </select>
         </div>
@@ -23,32 +25,33 @@
     <div class="mb-3 row">
         <label for="labelList" class="col-sm-2 col-form-label"><strong>Labels List: </strong></label>
         <div class="col-sm-3">
-            <table class="table align-middle mb-0 bg-white caption-top mx-2">
+            <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm">
                 <thead class=" table-dark">
                     <tr>
                         <th>Name</th>
-                        <th>Delete</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody class="table-responsive-sm" *ngIf="newDocument.labelDocuments">
-                    <tr *ngFor="let label of labelsList">
+                <tbody *ngIf="newDocument.labels">
+                    <tr *ngFor="let label of labelsList; let i = index">
                         <td>{{label.labelName}}</td>
                         <td>
                             <button type="button" title="Delete row" class="btn btn-outline-danger pe-auto border-0"><i
-                                    class="fa fa-xl fa-xmark"></i></button>
+                                    class="fa fa-xl fa-xmark" (click)="onDeleteLabel(i)"></i></button>
                         </td>
                     </tr>
                 </tbody>
                 <tbody>
                     <tr>
                         <td>
-                            <input type="text" class="form-control m-2" placeholder="Enter label">
+                            <input type="text" class="form-control m-2" placeholder="Enter label"
+                                [(ngModel)]="newLabelDocument" name="labelID">
                         </td>
                         <td>
                             <div class="btn-group mx-1">
                                 <button type="button" title="Add new"
-                                    class="btn btn-outline-success border-0 pe-auto"><i
-                                        class="fa fa-xl fa-add"></i></button>
+                                    class="btn btn-outline-success border-0 pe-auto"><i class="fa fa-xl fa-add"
+                                        (click)="onAddLabel()"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -56,55 +59,58 @@
             </table>
         </div>
     </div>
-    <div class="mb-3 row">
-        <label for="productList" class="col-sm-2 col-form-label"><strong>Products List: </strong></label>
-        <div class="col-sm-7">
-            <table class="table align-middle mb-0 bg-white caption-top">
+    <div class=" mb-3 row">
+        <label for="productList" class="col-sm-2 col-form-label"><strong>Products List:
+            </strong></label>
+        <div class="col-sm-9">
+            <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm">
                 <thead class="table-dark">
                     <tr>
-                        <th class='col-sm-auto'>Name</th>
-                        <th class="col-sm-auto">Barcode</th>
-                        <th class="col-sm-auto">Quantity</th>
-                        <th class="col-sm-auto">Price</th>
-                        <th class="row-cols-sm-auto">Actions</th>
+                        <th class='col-sm-3'>Name</th>
+                        <th class="col-sm-3">Barcode</th>
+                        <th class="col-sm-2">Quantity</th>
+                        <th class="col-sm-2">Price</th>
+                        <th class="col-sm-1">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="table-responsive-sm">
-                    <tr *ngIf="!true">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                <tbody *ngFor="let product of documentProducts; let i = index">
+                    <tr>
+                        <td>{{product.productName}}</td>
+                        <td>{{product.productBarcode}}</td>
+                        <td>{{product.quantity}}</td>
+                        <td>{{product.price | currency}}</td>
                         <td>
                             <button type="button" title="Delete row" class="btn btn-outline-danger pe-auto border-0"><i
-                                    class="fa fa-xl fa-xmark"></i></button>
+                                    class="fa fa-xl fa-xmark" (click)="onDeleteProduct(i)"></i></button>
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="table-responsive-sm">
+                <tbody>
                     <tr>
-                        <td>
-                            <input type="text" class="form-control m-2" placeholder="Enter name...">
+                        <td colspan="2">
+                            <select title="Select product and Barcode" class="form-select"
+                                [(ngModel)]="newProduct.productID" name="productID">
+                                <ng-container *ngFor="let product of productsList">
+                                    <option [ngValue]="product.productID">
+                                        {{product.productName}}</option>
+                                </ng-container>
+                            </select>
                         </td>
                         <td>
-                            <input type="text" class="form-control m-2" placeholder="Enter barcode...">
-                        </td>
-                        <td>
-                            <input type="number" min="0" class="form-control m-2" placeholder="Enter qty">
+                            <input type="number" min="1" class="form-control m-2" placeholder="1"
+                                [(ngModel)]="newProduct.quantity" name="quantity">
                         </td>
                         <td>
                             <div class="input-group m-2">
                                 <span class="input-group-text">$</span>
-                                <input type="number" step="0.01" min="0" value="" class="form-control"
-                                    placeholder="0.00">
+                                <input type="number" step="0.01" min="0" class="form-control" placeholder="0.00"
+                                    [(ngModel)]="newProduct.price" name="price">
                             </div>
                         </td>
                         <td>
-                            <div class="btn-group mx-1">
-                                <button type="button" title="Add new"
-                                    class="btn btn-outline-success border-0 pe-auto"><i
-                                        class="fa fa-xl fa-add"></i></button>
-                            </div>
+                            <button type="button" (click)="onAddProduct()" title="Add new"
+                                class="btn btn-outline-success border-0 pe-auto"><i
+                                    class="fa fa-xl fa-add"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -115,7 +121,7 @@
     <button type="button" class="btn btn-secondary mx-1" routerLink="..">
         Back to list
     </button>
-    <button type="submit" class="btn btn-success mx-1">
+    <button type="submit" class="btn btn-success mx-1" (click)="onAdd()">
         Submit
     </button>
 </form>

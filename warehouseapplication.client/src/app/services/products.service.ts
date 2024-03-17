@@ -12,8 +12,8 @@ export class ProductsService {
   constructor(private http: HttpClient) {}
 
   // Create
-  createProduct(products: Product): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, products);
+  createProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
   }
 
   // Read

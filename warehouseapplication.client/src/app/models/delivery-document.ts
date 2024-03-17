@@ -4,13 +4,13 @@ import { Storehouse } from './storehouse';
 import { Supplier } from './supplier';
 
 export interface DeliveryDocument {
-  documentID: number | undefined;
-  isApproved: boolean;
-  isCancelled: boolean;
-  supplierID: number | undefined;
-  supplier?: Supplier;
-  labelDocuments?: LabelDocument[];
+  documentID?: number;
+  isApproved?: boolean;
+  isCancelled?: boolean;
+  supplierID: number;
+  supplierInfo?: Supplier;
+  labels?: LabelDocument[];
   products?: ProductList[];
-  storehouseID: number | undefined;
-  storehouse?: Storehouse;
+  storehouseID: number;
+  storehouseInfo?: Storehouse;
 }

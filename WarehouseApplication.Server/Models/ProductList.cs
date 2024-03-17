@@ -8,11 +8,11 @@ namespace WarehouseApplication.Server.Models
 		[Key]
 		public int ListID{ get; set; }
 
-		[ForeignKey(nameof(DocumentID))]
+		[ForeignKey("DeliveryDocument")]
 		public int DocumentID { get; set; }
 		public DeliveryDocument? Document { get; set; }
 
-		[ForeignKey(nameof(ProductID))]
+		[ForeignKey("Product")]
 		public int ProductID { get; set; }
 		public Product? Product { get; set; }
 		

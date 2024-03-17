@@ -11,12 +11,16 @@ import { Subscription } from 'rxjs';
 export class DeliveryDocumentsComponent {
   public deliveryDocuments: DeliveryDocument[] = [];
   private subscription!: Subscription;
-  constructor(private deliveryDocumentsService: DeliveryDocumentsService) {}
-
+  public indexID: number = 0;
+  public index: number[] = [];
+  constructor(private deliveryDocumentsService: DeliveryDocumentsService) {
+  }
   ngOnInit() {
     this.subscription = this.deliveryDocumentsService
       .getDeliveryDocuments()
-      .subscribe((data: DeliveryDocument[]) => (this.deliveryDocuments = data));
+      .subscribe((data: DeliveryDocument[]) => {
+        this.deliveryDocuments = data;
+      });
   }
 
   ngOnDestroy() {

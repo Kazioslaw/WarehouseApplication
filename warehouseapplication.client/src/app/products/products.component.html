@@ -5,7 +5,7 @@
 		</caption>
 		<button class="btn btn-primary" routerLink="add">Add</button>
 	</div>
-	<table class="table align-middle mb-0 bg-white caption-top fixed-header" *ngIf="products">
+	<table class="table align-middle mb-0 bg-white caption-top fixed-header table-responsive-sm" *ngIf="products">
 		<thead class="table-dark">
 			<tr>
 				<th class="col-sm-1">ID</th>
@@ -16,9 +16,9 @@
 		</thead>
 		<tbody>
 			<ng-container>
-				<tr *ngFor="let product of products">
+				<tr *ngFor="let product of products; let id = index">
 					<td>
-						{{product.productID}}
+						{{id+1}}
 					</td>
 					<td>
 						{{product.productName}}
@@ -37,4 +37,4 @@
 		</tbody>
 	</table>
 </div>
-<toaster></toaster>
+<toaster aria-live="polite" aria-atomic="true"></toaster>

@@ -23,7 +23,7 @@ import { CancelDeliveryDocumentComponent } from './delivery-documents/cancel-del
 import { ApproveDeliveryDocumentComponent } from './delivery-documents/approve-delivery-document/approve-delivery-document.component';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbNav, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { Toaster } from './toaster/toaster.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
