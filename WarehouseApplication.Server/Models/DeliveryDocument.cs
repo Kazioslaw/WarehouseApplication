@@ -21,7 +21,7 @@ namespace WarehouseApplication.Server.Models
         public ICollection<ProductList>? ProductLists { get; set; }
 
 		[ForeignKey("Storehouse")]
-		public int? StorehouseID { get; set; }
+		public int StorehouseID { get; set; }
 		public Storehouse? Storehouse { get; set; }
 	}
 }
