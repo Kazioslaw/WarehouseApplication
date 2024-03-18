@@ -40,7 +40,7 @@
                             <th>Label Name</th>
                         </tr>
                     </thead>
-                    <tbody class="table-responsive-sm" *ngFor="let labels of deliveryDocumentDetails.labels">
+                    <tbody class="table-responsive-sm" *ngFor="let labels of deliveryDocumentDetails.labelDocuments">
                         <tr>
                             <td>{{labels.labelName}}</td>
                         </tr>
@@ -60,7 +60,8 @@
                             <th>Price</th>
                         </tr>
                     </thead>
-                    <tbody class="table-responsive-sm" *ngFor="let productsList of deliveryDocumentDetails.products">
+                    <tbody class="table-responsive-sm"
+                        *ngFor="let productsList of deliveryDocumentDetails.productLists">
                         <tr>
                             <td>{{productsList.productName}}</td>
                             <td>{{productsList.productBarcode}}</td>

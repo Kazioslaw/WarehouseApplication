@@ -1,69 +1,69 @@
 <h2 class="my-3">Adding new supplier</h2>
 
-<form #supplierForm="ngForm" (ngSubmit)="saveSupplier()">
+<form [formGroup]="addSupplierForm" (ngSubmit)="onSubmit()">
   <div class="mb-3 row">
     <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="name" name="name" required minlength="3"
-        [(ngModel)]="newSupplier.supplierName" placeholder="Enter name">
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['name']?.touched && supplierForm.controls['name']?.hasError('required')">
-        Name is required</div>
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['name']?.touched && supplierForm.controls['name']?.hasError('minlength')">
+      <input type="text" class="form-control" id="name" name="name" formControlName="supplierName"
+        placeholder="Enter name">
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierName')?.touched && addSupplierForm.get('supplierName')?.hasError('required')">
+        Name is required</small>
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierName')?.touched && addSupplierForm.get('supplierName')?.hasError('minlength')">
         Name must have at least 3 characters
-      </div>
+      </small>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="street" name="street" [(ngModel)]="newSupplier.supplierAddress"
-        required minlength="3" maxlength="60" placeholder="Enter address">
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['street']?.touched && supplierForm.controls['street']?.hasError('required')">
+      <input type="text" class="form-control" id="street" name="street" formControlName="supplierAddress"
+        placeholder="Enter address">
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierAddress')?.touched && addSupplierForm.get('supplierAddress')?.hasError('required')">
         Address is required
-      </div>
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['street']?.touched && supplierForm.controls['street']?.hasError('minlength') || supplierForm.controls['street'].hasError('maxlength')">
+      </small>
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierAddress')?.touched && addSupplierForm.get('supplierAddress')?.hasError('minlength') || addSupplierForm.get('supplierAddress')?.hasError('maxlength')">
         Length of address should be between 3 and 60 characters
-      </div>
+      </small>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="city" name="city" [(ngModel)]="newSupplier.supplierCity" required
-        minlength="3" maxlength="30" placeholder="Enter city name">
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['city']?.touched && supplierForm.controls['city']?.hasError('required')">
+      <input type="text" class="form-control" id="city" name="city" placeholder="Enter city name"
+        formControlName="supplierCity">
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierCity')?.touched && addSupplierForm.get('supplierCity')?.hasError('required')">
         City name is required
-      </div>
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['city']?.touched && supplierForm.controls['city']?.hasError('minlength') || supplierForm.controls['city'].hasError('maxlength')">
+      </small>
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierCity')?.touched && addSupplierForm.get('supplierCity')?.hasError('minlength') || addSupplierForm.get('supplierCity')?.hasError('maxlength')">
         Length of city name should be between 3 and 30 characters
-      </div>
+      </small>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="zipcode" name="zipcode" [(ngModel)]="newSupplier.supplierZipcode"
-        placeholder="Enter zipcode" required minlength="3" maxlength="60">
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['zipcode']?.touched && supplierForm.controls['zipcode']?.hasError('required')">
+      <input type="text" class="form-control" id="zipcode" name="zipcode" formControlName="supplierZipcode"
+        placeholder="Enter zipcode">
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierZipcode')?.touched && addSupplierForm.get('supplierZipcode')?.hasError('required')">
         Zipcode is required
-      </div>
-      <div class="text-danger"
-        *ngIf="supplierForm.controls['zipcode']?.touched && supplierForm.controls['zipcode']?.hasError('minlength') || supplierForm.controls['zipcode'].hasError('maxlength')">
+      </small>
+      <small class="text-danger fw-semibold"
+        *ngIf="addSupplierForm.get('supplierZipcode')?.touched && addSupplierForm.get('supplierZipcode')?.hasError('minlength') || addSupplierForm.get('supplierZipcode')?.hasError('maxlength')">
         Length of zipcode should be between 3 and 60 characters
-      </div>
+      </small>
     </div>
   </div>
   <button type="button" class="btn btn-secondary mx-1" routerLink="..">
     Back to list
   </button>
-  <button class="btn btn-success mx-1" type="submit" [disabled]="!supplierForm.valid">
+  <button class="btn btn-success mx-1" type="submit" [disabled]="!addSupplierForm.valid">
     Submit
   </button>
 </form>

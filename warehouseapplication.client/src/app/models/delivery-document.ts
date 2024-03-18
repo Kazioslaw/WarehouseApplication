@@ -9,8 +9,8 @@ export interface DeliveryDocument {
   isCancelled?: boolean;
   supplierID: number;
   supplierInfo?: Supplier;
-  labels?: LabelDocument[];
-  products?: ProductList[];
+  labelDocuments?: LabelDocument[];
+  productLists?: ProductList[];
   storehouseID: number;
   storehouseInfo?: Storehouse;
 }

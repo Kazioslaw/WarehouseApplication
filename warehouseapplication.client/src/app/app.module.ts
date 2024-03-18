@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { StorehousesComponent } from './storehouses/storehouses.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
@@ -52,7 +51,6 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    FormsModule,
     NgbNavModule,
     HttpClientModule,
     ReactiveFormsModule,
