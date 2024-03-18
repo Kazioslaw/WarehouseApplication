@@ -28,8 +28,6 @@ export class ViewDeliveryDocumentComponent {
       .subscribe((data: DeliveryDocument) => {
         this.deliveryDocumentDetails = data;
       });
-
-      console.log(JSON.stringify(this.deliveryDocumentDetails.labels))
   }
 
   ngOnDestroy() {

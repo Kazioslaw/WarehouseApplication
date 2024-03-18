@@ -24,21 +24,20 @@ export class DeleteProductComponent {
 
   ngOnInit() {
     this.ID = parseInt(this.activeRoute.snapshot.paramMap.get('id') || '');
-
     this.productsService.getProductByID(this.ID).subscribe((data: Product) => {
       this.productDetails = data;
     });
   }
 
-  onDelete(id: number): void {
-    this.subscription = this.productsService.deleteProduct(id).subscribe(() => {
-      this.toast.show('Product succesfully deleted', 'bg-danger text-light');
-      this.router.navigate(['products']);      
-    });
+  onDelete() {
+    console.log(this.ID);
+    this.subscription = this.productsService
+      .deleteProduct(this.ID)
+      .subscribe(() => {
+        this.toast.show('Product succesfully deleted', 'bg-danger text-light');
+        this.router.navigate(['products']);
+      });
   }
-
-  showSuccessMessage() {}
-
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();

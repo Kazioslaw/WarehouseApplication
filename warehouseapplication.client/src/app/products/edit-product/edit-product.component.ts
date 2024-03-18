@@ -25,8 +25,12 @@ export class EditProductComponent {
   ) {
     this.editProductForm = this.formBuilder.group({
       productID: undefined,
-      productName: [Validators.minLength(3)],
-      productBarcode: [Validators.minLength(3), Validators.maxLength(48)],
+      productName: [Validators.minLength(3), Validators.required],
+      productBarcode: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(48),
+      ],
     });
   }
 

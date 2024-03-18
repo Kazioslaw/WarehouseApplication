@@ -29,16 +29,18 @@ export class DeleteSupplierComponent {
       .subscribe((data: Supplier) => {
         this.supplierDetails = data;
       });
+    console.log(JSON.stringify(this.supplierDetails));
   }
 
-  delete(id: number): void {
+  onDelete(id: number): void {
+    console.log(JSON.stringify(this.supplierDetails));
     this.subscription = this.suppliersService
       .deleteSupplier(id)
       .subscribe(() => {
         console.log('Supplier Deleted');
         this.toast.show(
           'Supplier successfully deleted.',
-          'bg-danger, text-light'
+          'bg-danger text-light'
         );
         this.router.navigate(['suppliers']);
       });

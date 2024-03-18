@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
@@ -12,6 +13,7 @@ using NuGet.Common;
 using NuGet.Versioning;
 using WarehouseApplication.Server.Data;
 using WarehouseApplication.Server.Models;
+using static System.Net.WebRequestMethods;
 
 namespace WarehouseApplication.Server.Controllers
 {
@@ -49,12 +51,12 @@ namespace WarehouseApplication.Server.Controllers
                     SupplierCity = dd.Supplier?.SupplierCity,
                     SupplierZipcode = dd.Supplier?.SupplierZipcode,
                 },
-                Labels = dd.LabelDocuments.Select(ld => new
+                labelDocuments = dd.LabelDocuments.Select(ld => new
                 {
                     LabelID = ld.LabelID,
                     LabelName = ld.Label?.LabelName
                 }),
-                Products = dd.ProductLists.Select(pl => new
+                ProductLists = dd.ProductLists.Select(pl => new
                 {
                     ListID = pl.ListID,
                     DocumentID = pl.DocumentID,
@@ -84,26 +86,26 @@ namespace WarehouseApplication.Server.Controllers
                                                                     .ThenInclude(p => p.Product)
                                                                   .Include(dd => dd.Storehouse)
                                                                   .Include(dd => dd.Supplier)
-                                                                  .SingleOrDefaultAsync(dd=> dd.DocumentID == id);
+                                                                  .SingleOrDefaultAsync(dd => dd.DocumentID == id);
             var simplyfiedDocument = new
             {
                 deliveryDocument.DocumentID,
                 deliveryDocument.IsApproved,
                 deliveryDocument.IsCancelled,
+                deliveryDocument.SupplierID,
                 SupplierInfo = new
                 {
-                    SupplierID = deliveryDocument.Supplier?.SupplierID,
                     SupplierName = deliveryDocument.Supplier?.SupplierName,
                     SupplierAddress = deliveryDocument.Supplier?.SupplierAddress,
                     SupplierCity = deliveryDocument.Supplier?.SupplierCity,
                     SupplierZipcode = deliveryDocument.Supplier?.SupplierZipcode,
                 },
-                Labels = deliveryDocument.LabelDocuments.Select(ld => new
+                labelDocuments = deliveryDocument.LabelDocuments.Select(ld => new
                 {
                     LabelID = ld.LabelID,
                     LabelName = ld.Label?.LabelName
                 }),
-                Products = deliveryDocument.ProductLists.Select(pl => new
+                ProductLists = deliveryDocument.ProductLists.Select(pl => new
                 {
                     ListID = pl.ListID,
                     DocumentID = pl.DocumentID,
@@ -113,18 +115,18 @@ namespace WarehouseApplication.Server.Controllers
                     Quantity = pl.Quantity,
                     Price = pl.Price,
                 }),
+                deliveryDocument.StorehouseID,
                 StorehouseInfo = new
                 {
-                    StorehouseID = deliveryDocument.Storehouse?.StorehouseID,
                     StorehouseName = deliveryDocument.Storehouse?.StorehouseName,
                     StorehouseSymbol = deliveryDocument.Storehouse?.StorehouseSymbol,
                 }
-            };                                                                
+            };
 
-            if(!DeliveryDocumentExists(id))
+            if (!DeliveryDocumentExists(id))
             {
                 return NotFound();
-            }     
+            }
 
             return Ok(simplyfiedDocument);
         }
@@ -132,20 +134,56 @@ namespace WarehouseApplication.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeliveryDocument(int id, DeliveryDocument deliveryDocument)
         {
-            string json = JsonConvert.SerializeObject(deliveryDocument);
-            string jsonFile = @"E:\Json\test.json";
-            using (StreamWriter writer = new StreamWriter(jsonFile, append: true))
+            if (id != deliveryDocument.DocumentID)
             {
-                writer.WriteLine(json);
+                return NotFound();
             }
 
-            if (_context.Supplier.Any(s => s.SupplierID != deliveryDocument.SupplierID))
+            if (!ModelState.IsValid)
             {
-                BadRequest("Supplier ID not found in database");
+                return BadRequest(ModelState);
             }
 
-            _context.DeliveryDocument.Update(deliveryDocument);
-            _context.SaveChanges();
+            try
+            {
+                var existingDocument = await _context.DeliveryDocument
+                    .Include(dd => dd.LabelDocuments)
+                    .Include(dd => dd.ProductLists)
+                    .FirstOrDefaultAsync(dd => dd.DocumentID == id);
+
+                if (existingDocument == null)
+                {
+                    return NotFound();
+                }
+                
+                _context.Entry(existingDocument).CurrentValues.SetValues(deliveryDocument);
+
+                // Remove existing label documents
+                _context.LabelDocument.RemoveRange(existingDocument.LabelDocuments);
+                _context.ProductList.RemoveRange(existingDocument.ProductLists);
+                foreach (var labelDocument in deliveryDocument.LabelDocuments)
+                {
+                    existingDocument.LabelDocuments.Add(labelDocument);
+                }
+                foreach(var productList in deliveryDocument.ProductLists)
+                {
+                    existingDocument.ProductLists.Add(productList);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DeliveryDocumentExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return Ok();
         }
 

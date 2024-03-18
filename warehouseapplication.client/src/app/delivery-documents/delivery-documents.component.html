@@ -1,9 +1,8 @@
-<h1 class="text-danger">Add and Edit view not working</h1>
 <div *ngIf="deliveryDocuments">
   <div class="d-flex justify-content-between align-items-center mb-2">
     <caption class="align-middle caption-top">
       <h2 class="align-middle caption-top">Delivery Documents</h2>
-    </caption><button class="btn btn-primary" disabled routerLink="add">Add</button>
+    </caption><button class="btn btn-primary" routerLink="add">Add</button>
   </div>
   <table class="table align-middle mb-0 bg-white caption-top table-responsive-sm" *ngIf="deliveryDocuments">
     <thead class="table-dark">
@@ -17,7 +16,7 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody *ngFor="let deliveryDocument of deliveryDocuments;let i = index">
+    <tbody *ngFor="let deliveryDocument of deliveryDocuments; let i = index">
       <tr>
         <ng-container *ngIf="!deliveryDocument.isCancelled;">
           <td>
@@ -30,27 +29,27 @@
             {{deliveryDocument.storehouseInfo?.storehouseName ?? "Brak danych"}}
           </td>
           <td>
-            <div *ngFor="let labelDocument of deliveryDocument.labels">
+            <div *ngFor="let labelDocument of deliveryDocument.labelDocuments">
               {{
-              labelDocument.label?.labelName
+              labelDocument?.labelName
               }}
             </div>
           </td>
           <td>
-            <div *ngFor="let product of deliveryDocument.products">
-              {{ product.product?.productName }}
+            <div *ngFor="let product of deliveryDocument.productLists">
+              {{ product?.productName }}
             </div>
           </td>
           <td>
             <strong>{{deliveryDocument.isApproved ? " Yes" : "No" }}</strong>
           </td>
           <td>
-            <ng-container *ngIf="!deliveryDocument.isApproved;else disabledButtons">
+            <ng-container *ngIf="!deliveryDocument.isApproved; else disabledButtons">
               <button type="button" title="view" class="btn btn-primary m-1 d-sm-inline"
                 routerLink="view/{{deliveryDocument.documentID}}">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
-              <button title="Edit disabled" type="button" disabled routerLink="edit/{{deliveryDocument.documentID}}"
+              <button title="Edit disabled" type="button" routerLink="edit/{{deliveryDocument.documentID}}"
                 class="btn btn-dark  d-sm-inline">
                 <i class="fa-solid fa-edit"></i>
               </button>
