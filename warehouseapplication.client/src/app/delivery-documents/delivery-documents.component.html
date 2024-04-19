@@ -16,11 +16,11 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody *ngFor="let deliveryDocument of deliveryDocuments; let i = index">
-      <tr>
-        <ng-container *ngIf="!deliveryDocument.isCancelled;">
+    <tbody>
+      <ng-container *ngFor="let deliveryDocument of deliveryDocuments; let i = index">
+        <tr *ngIf="!deliveryDocument.isCancelled;">
           <td>
-            {{i+1}}
+            {{i + 1 - countCancelled(deliveryDocuments.slice(0, i + 1))}}
           </td>
           <td>
             {{deliveryDocument.supplierInfo?.supplierName}}
@@ -36,8 +36,8 @@
             </div>
           </td>
           <td>
-            <div *ngFor="let product of deliveryDocument.productLists">
-              {{ product?.productName }}
+            <div *ngFor="let product of deliveryDocument.productList">
+              {{ product.productName }}
             </div>
           </td>
           <td>
@@ -81,8 +81,8 @@
               </button>
             </ng-template>
           </td>
-        </ng-container>
-      </tr>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>

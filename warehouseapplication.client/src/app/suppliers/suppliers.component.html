@@ -13,6 +13,7 @@
         <th>Street</th>
         <th>City</th>
         <th>Zipcode</th>
+        <th>Country</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -26,19 +27,24 @@
           {{supplier.supplierName}}
         </td>
         <td>
-          {{supplier.supplierAddress}}
+          {{supplier.address.street}}
         </td>
         <td>
-          {{supplier.supplierCity}}
+          {{supplier.address.city}}
         </td>
         <td>
-          {{supplier.supplierZipcode}}
+          {{supplier.address.zipcode}}
         </td>
         <td>
-          <button title="edit" routerLink="edit/{{supplier.supplierID}}" class="btn btn-secondary"><i
-              class="fa-solid fa-edit"></i></button>
-          <button title="delete" routerLink="delete/{{supplier.supplierID}}" class="btn btn-danger m-1"><i
-              class="fa-solid fa-trash"></i></button>
+          {{supplier.address.country}}
+        </td>
+        <td>
+          <button title="edit" routerLink="edit/{{supplier.supplierID}}" class="btn btn-secondary">
+            <i class="fa-solid fa-edit"></i>
+          </button>
+          <button title="delete" routerLink="delete/{{supplier.supplierID}}" class="btn btn-danger m-1">
+            <i class="fa-solid fa-trash"></i>
+          </button>
         </td>
       </tr>
     </tbody>

@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/toaster/toast.service';
 import { ProductList } from 'src/app/models/product-list';
 import { LabelDocument } from 'src/app/models/label-document';
 import { LabelsService } from 'src/app/services/labels.service';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DeliveryDocumentsService } from 'src/app/services/delivery-documents.service';
 import { Router } from '@angular/router';
 
@@ -26,9 +26,10 @@ export class AddDeliveryDocumentComponent {
     storehouseID: 0,
     supplierID: 0,
     labelDocuments: [],
-    productLists: [],
+    productList: [],
   };
   addDocumentForm!: FormGroup;
+
   newProduct: ProductList = {
     productID: 0,
     price: 0,
@@ -103,6 +104,12 @@ export class AddDeliveryDocumentComponent {
       labelName: this.addDocumentForm.get('labelDocuments.labelID')?.value,
       labelID: 0,
     };
+
+    if (!this.newLabel.labelName || this.newLabel.labelName.trim() === '') {
+      this.toast.show('LabelName cannot be empty!', 'bg-danger text-light');
+      return;
+    }
+
     const selectedLabel = this.labelsList.find(
       (l) => l.labelName === this.newLabel.labelName
     );
@@ -144,9 +151,9 @@ export class AddDeliveryDocumentComponent {
         parseInt(this.addDocumentForm.get('productLists.productID')?.value)
     );
     if (selectedProduct) {
-      this.newProduct.productID = selectedProduct.productID
-        this.newProduct.productName = selectedProduct.productName
-        this.newProduct.productBarcode = selectedProduct.productBarcode
+      this.newProduct.productID = selectedProduct.productID;
+      this.newProduct.productName = selectedProduct.productName;
+      this.newProduct.productBarcode = selectedProduct.productBarcode;
       this.newProduct.quantity = this.addDocumentForm.get(
         'productLists.quantity'
       )?.value;
@@ -169,17 +176,17 @@ export class AddDeliveryDocumentComponent {
   }
 
   onAdd() {
-    alert('Nowy dokument dodany');
     this.newDocument = this.addDocumentForm.value;
-    this.newDocument.productLists = this.documentProducts;
+    this.newDocument.productList = this.documentProducts;
     this.newDocument.labelDocuments = this.documentLabels;
     const sortedDocument: DeliveryDocument = {
       supplierID: this.newDocument.supplierID,
       storehouseID: this.newDocument.storehouseID,
       labelDocuments: this.documentLabels,
-      productLists: this.documentProducts,
+      productList: this.documentProducts,
     };
-    this.deliveryDocumentsService
+    console.log(JSON.stringify(this.newDocument));
+    this.subscription = this.deliveryDocumentsService
       .createDelieryDocument(sortedDocument)
       .subscribe(() => {
         this.toast.show('Document successfully added', 'bg-success text-light');

@@ -28,4 +28,9 @@ export class DeliveryDocumentsComponent {
       this.subscription.unsubscribe();
     }
   }
+
+  countCancelled(documents: any[]): number {
+    return documents.filter(doc => doc.isCancelled).length;
+  }
+
 }

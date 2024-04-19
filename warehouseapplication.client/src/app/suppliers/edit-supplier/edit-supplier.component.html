@@ -1,36 +1,38 @@
 <div *ngIf="supplierDetails">
-    <h2 class="my-3">Editing supplier</h2>
+  <h2 class="my-3">Editing supplier</h2>
 
-    <form [formGroup]="editSupplierForm" (ngSubmit)="onSubmit()">
-        <div class="mb-3 row form-group">
-            <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" formControlName="name" id="name">
-            </div>
+  <form [formGroup]="editSupplierForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3 row form-group">
+      <label for="name" class="col-sm-2 col-form-label"><strong>Name: </strong></label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" formControlName="supplierName" id="name">
+      </div>
+    </div>
+    <div formGroupName="address">
+      <div class="mb-3 row">
+        <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="street" id="street">
         </div>
-        <div class="mb-3 row">
-            <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" formControlName="street" id="street">
-            </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="city" id="city">
         </div>
-        <div class="mb-3 row">
-            <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" formControlName="city" id="city">
-            </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="zipcode" id="zipcode">
         </div>
-        <div class="mb-3 row">
-            <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" formControlName="zipcode" id="zipcode">
-            </div>
-        </div>
-        <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
-            Back to list
-        </button>
-        <button type="submit" class="btn btn-success mx-1">
-            Submit
-        </button>
-    </form>
+      </div>
+    </div>
+    <button type="button" class="btn btn-secondary mx-1" routerLink="../..">
+      Back to list
+    </button>
+    <button type="submit" class="btn btn-success mx-1">
+      Submit
+    </button>
+  </form>
 </div>

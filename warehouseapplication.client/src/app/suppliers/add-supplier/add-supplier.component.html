@@ -8,56 +8,73 @@
         placeholder="Enter name">
       <small class="text-danger fw-semibold"
         *ngIf="addSupplierForm.get('supplierName')?.touched && addSupplierForm.get('supplierName')?.hasError('required')">
-        Name is required</small>
+        Name is required
+      </small>
       <small class="text-danger fw-semibold"
         *ngIf="addSupplierForm.get('supplierName')?.touched && addSupplierForm.get('supplierName')?.hasError('minlength')">
         Name must have at least 3 characters
       </small>
     </div>
   </div>
-  <div class="mb-3 row">
-    <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="street" name="street" formControlName="supplierAddress"
-        placeholder="Enter address">
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierAddress')?.touched && addSupplierForm.get('supplierAddress')?.hasError('required')">
-        Address is required
-      </small>
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierAddress')?.touched && addSupplierForm.get('supplierAddress')?.hasError('minlength') || addSupplierForm.get('supplierAddress')?.hasError('maxlength')">
-        Length of address should be between 3 and 60 characters
-      </small>
+  <div formGroupName="address">
+    <div class="mb-3 row">
+      <label for="street" class="col-sm-2 col-form-label"><strong>Street: </strong></label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="street" name="street" formControlName="street"
+          placeholder="Enter address">
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('street')?.touched && addSupplierForm.get('street')?.hasError('required')">
+          Address is required
+        </small>
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('street')?.touched && addSupplierForm.get('street')?.hasError('minlength') || addSupplierForm.get('street')?.hasError('maxlength')">
+          Address should be between 3 and 60 characters
+        </small>
+      </div>
     </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="city" name="city" placeholder="Enter city name"
-        formControlName="supplierCity">
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierCity')?.touched && addSupplierForm.get('supplierCity')?.hasError('required')">
-        City name is required
-      </small>
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierCity')?.touched && addSupplierForm.get('supplierCity')?.hasError('minlength') || addSupplierForm.get('supplierCity')?.hasError('maxlength')">
-        Length of city name should be between 3 and 30 characters
-      </small>
+    <div class="mb-3 row">
+      <label for="city" class="col-sm-2 col-form-label"><strong>City: </strong></label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="city" name="city" placeholder="Enter city name"
+          formControlName="city">
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('city')?.touched && addSupplierForm.get('city')?.hasError('required')">
+          City name is required
+        </small>
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('city')?.touched && addSupplierForm.get('city')?.hasError('minlength') || addSupplierForm.get('city')?.hasError('maxlength')">
+          City name should be between 3 and 30 characters
+        </small>
+      </div>
     </div>
-  </div>
-  <div class="mb-3 row">
-    <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="zipcode" name="zipcode" formControlName="supplierZipcode"
-        placeholder="Enter zipcode">
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierZipcode')?.touched && addSupplierForm.get('supplierZipcode')?.hasError('required')">
-        Zipcode is required
-      </small>
-      <small class="text-danger fw-semibold"
-        *ngIf="addSupplierForm.get('supplierZipcode')?.touched && addSupplierForm.get('supplierZipcode')?.hasError('minlength') || addSupplierForm.get('supplierZipcode')?.hasError('maxlength')">
-        Length of zipcode should be between 3 and 60 characters
-      </small>
+    <div class="mb-3 row">
+      <label for="zipcode" class="col-sm-2 col-form-label"><strong>Zipcode: </strong></label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="zipcode" name="zipcode" formControlName="zipcode"
+          placeholder="Enter zipcode">
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('zipcode')?.touched && addSupplierForm.get('zipcode')?.hasError('required')">
+          Zipcode is required
+        </small>
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('zipcode')?.touched && addSupplierForm.get('zipcode')?.hasError('minlength') || addSupplierForm.get('zipcode')?.hasError('maxlength')">
+          Zipcode should be between 3 and 20 characters
+        </small>
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <label for="country" class="col-sm-2 col-form-label"><strong>Country:</strong></label>
+      <div class="col-sm-8">
+        <input type="text" name="country" id="country" class="form-control" formControlName="country"
+          placeholder="Enter country name">
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('country')?.touched && addSupplierForm.get('country')?.hasError('required')">
+          Country name is required
+        </small>
+        <small class="text-danger fw-semibold"
+          *ngIf="addSupplierForm.get('country')?.touched && addSupplierForm.get('country')?.hasError('minlength') || addSupplierForm.get('country')?.hasError('maxlength')">
+          Country name should be between 3 and 60 characters. </small>
+      </div>
     </div>
   </div>
   <button type="button" class="btn btn-secondary mx-1" routerLink="..">

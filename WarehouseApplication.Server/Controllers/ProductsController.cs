@@ -20,14 +20,25 @@ namespace WarehouseApplication.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
         {
-            return Ok(await _context.Product.ToListAsync());
+            var products = await _context.Product.Select(p => new
+            {
+                p.ProductID,
+                p.ProductName,
+                p.ProductBarcode,
+            }).ToListAsync();
+            return Ok(products);
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Product.Where(p => p.ProductID == id).Select(p => new
+            {
+                p.ProductID,
+                p.ProductName,
+                p.ProductBarcode,
+            }).FirstOrDefaultAsync();
 
             if (product == null)
             {
@@ -47,7 +58,7 @@ namespace WarehouseApplication.Server.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.Product.Update(product);
 
             try
             {
@@ -71,12 +82,41 @@ namespace WarehouseApplication.Server.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult> PostProduct(List<Product> product)
         {
-            _context.Product.Add(product);
-            await _context.SaveChangesAsync();          
-            return CreatedAtAction("GetProduct", new { id = product.ProductID }, product);
+            var newProducts = new List<Product>();
+
+            if (product.Count == 1)
+            {
+                if (!_context.Product.Any(p => p.ProductName == product[0].ProductName && p.ProductBarcode == product[0].ProductBarcode) || !_context.Product.Any(p => p.ProductName == product[0].ProductName))
+                {
+                    _context.Product.Add(product.First());
+                }
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetProduct", new { id = product.First().ProductID }, product);
+            }
+            else
+            {
+                foreach (var prod in product)
+                {
+                    if (!_context.Product.Any(p => p.ProductName == prod.ProductName && p.ProductBarcode == prod.ProductBarcode) || !_context.Product.Any(p => p.ProductName == prod.ProductName))
+                    {
+                        newProducts.Add(prod);
+                    }
+                }
+                _context.Product.AddRange(newProducts);
+                await _context.SaveChangesAsync();
+                var addedProducts = newProducts.Select(p => new
+                {
+                    id = p.ProductID,
+                    name = p.ProductName,
+                    barcode = p.ProductBarcode,
+                });
+                return CreatedAtAction("GetProduct", addedProducts);
+            }
+
         }
+
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]

@@ -10,7 +10,7 @@ export interface DeliveryDocument {
   supplierID: number;
   supplierInfo?: Supplier;
   labelDocuments?: LabelDocument[];
-  productLists?: ProductList[];
+  productList?: ProductList[];
   storehouseID: number;
   storehouseInfo?: Storehouse;
 }

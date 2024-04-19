@@ -49,10 +49,8 @@ export class EditDeliveryDocumentComponent {
     labelName: '',
   };
   documentProducts: ProductList[] = [];
-  oldProductList: ProductList[] = [];
   labelsList: Label[] = [];
   documentLabels: LabelDocument[] = [];
-  oldLabelList: LabelDocument[] = [];
   subscription!: Subscription;
   ID!: number;
   isEdit: boolean = false;
@@ -79,11 +77,9 @@ export class EditDeliveryDocumentComponent {
       .getDeliveryDocumentByID(this.ID)
       .subscribe((data: DeliveryDocument) => {
         this.deliveryDocument = data;
-        this.documentProducts = data.productLists!;
-        this.oldProductList = data.productLists!;
-        this.documentLabels = data.labelDocuments!;
-        this.oldLabelList = data.labelDocuments!;
-        console.log(JSON.stringify(data.productLists));
+        this.documentProducts = data.productList || [];
+        this.documentLabels = data.labelDocuments || [];
+        console.log(JSON.stringify(data));
       });
 
     this.subscription = this.suppliersService
@@ -106,10 +102,10 @@ export class EditDeliveryDocumentComponent {
   }
 
   ngOnInit() {
-    this.editDocumentForm = new FormGroup({
-      supplierID: new FormControl(Validators.required),
-      storehouseID: new FormControl(Validators.required),
-      labelDocuments: new FormGroup({
+    this.editDocumentForm = this.formBuilder.group({
+      supplierID: new FormControl('', [Validators.required]),
+      storehouseID: new FormControl('', [Validators.required]),
+      labelDocuments: this.formBuilder.group({
         labelID: new FormControl('', [Validators.required]),
       }),
       productLists: new FormGroup({
@@ -136,13 +132,14 @@ export class EditDeliveryDocumentComponent {
         ]),
       }),
     });
+
     this.initializeForm();
   }
 
   initializeForm(): void {
     this.editDocumentForm.patchValue({
-      supplierID: this.deliveryDocument.supplierInfo?.supplierID,
-      storehouseID: this.deliveryDocument.storehouseInfo?.storehouseID,
+      supplierID: this.deliveryDocument.supplierID,
+      storehouseID: this.deliveryDocument.storehouseID,
     });
   }
 
@@ -151,9 +148,17 @@ export class EditDeliveryDocumentComponent {
       labelName: this.editDocumentForm.get('labelDocuments.labelID')?.value,
       labelID: 0,
     };
+
+    if (!this.newLabel.labelName || this.newLabel.labelName.trim() === '') {
+      this.toast.show('LabelName cannot be empty!', 'bg-danger text-light');
+      console.log(this.newLabel.labelName);
+      return;
+    }
+
     const selectedLabel = this.labelsList.find(
       (l) => l.labelName === this.newLabel.labelName
     );
+
     if (selectedLabel?.labelID == null) {
       this.subscription = this.labelsService
         .createLabel(this.newLabel)
@@ -162,10 +167,13 @@ export class EditDeliveryDocumentComponent {
             .getLabels()
             .subscribe((data: Label[]) => (this.labelsList = data));
         });
+
       this.newLabel.labelID = this.labelsList.find(
         (l) => l.labelName === this.newLabel.labelName
       )?.labelID!;
+
       this.deliveryDocument.labelDocuments?.push({ ...this.newLabel });
+
       this.newLabel = {
         labelID: 0,
         labelName: '',
@@ -180,17 +188,19 @@ export class EditDeliveryDocumentComponent {
     }
     this.editDocumentForm.get('labelDocuments')?.reset();
   }
+
   onDeleteLabel(id: number) {
     this.deliveryDocument.labelDocuments?.splice(id, 1);
     console.log('label deleted');
   }
 
   onAddProduct() {
-    var selectedProduct = this.productsList.find(
+    const selectedProduct = this.productsList.find(
       (p) =>
         p.productID ===
         parseInt(this.editDocumentForm.get('productLists.productID')?.value)
     );
+
     if (selectedProduct) {
       this.newProduct.productID = selectedProduct.productID;
       this.newProduct.productName = selectedProduct.productName;
@@ -201,14 +211,18 @@ export class EditDeliveryDocumentComponent {
       this.newProduct.price =
         this.editDocumentForm.get('productLists.price')?.value;
     }
+
     this.documentProducts.push({ ...this.newProduct });
+    console.log(JSON.stringify(this.documentProducts));
+
     this.newProduct = {
       productID: 0,
       price: 0,
-      quantity: 0,
+      quantity: 1,
       productName: '',
       productBarcode: '',
     };
+
     this.editDocumentForm.get('productLists')?.reset();
   }
 
@@ -218,7 +232,7 @@ export class EditDeliveryDocumentComponent {
   }
 
   onEdit(productList: ProductList, id: number) {
-    this.deliveryDocument.productLists?.forEach((element) => {
+    this.deliveryDocument.productList?.forEach((element) => {
       element.isEdit = false;
     });
     productList.isEdit = true;
@@ -243,8 +257,8 @@ export class EditDeliveryDocumentComponent {
 
     const updatedQuantity = productListsFormGroup.get('editQuantity')?.value;
     const updatedPrice = productListsFormGroup.get('editPrice')?.value;
-    this.deliveryDocument.productLists![id].quantity = updatedQuantity;
-    this.deliveryDocument.productLists![id].price = updatedPrice;
+    this.deliveryDocument.productList![id].quantity = updatedQuantity;
+    this.deliveryDocument.productList![id].price = updatedPrice;
   }
 
   onSubmit() {
@@ -257,7 +271,7 @@ export class EditDeliveryDocumentComponent {
         this.editDocumentForm.get('supplierID')?.value ||
         this.deliveryDocument.supplierID,
       labelDocuments: this.documentLabels,
-      productLists: this.documentProducts,
+      productList: this.documentProducts,
     };
     console.log(JSON.stringify(sortedDocument));
     this.deliveryDocumentsService
