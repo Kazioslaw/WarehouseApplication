@@ -21,7 +21,7 @@ import { EditDeliveryDocumentComponent } from './delivery-documents/edit-deliver
 import { CancelDeliveryDocumentComponent } from './delivery-documents/cancel-delivery-document/cancel-delivery-document.component';
 import { ApproveDeliveryDocumentComponent } from './delivery-documents/approve-delivery-document/approve-delivery-document.component';
 import { HomeComponent } from './home/home.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { Toaster } from './toaster/toaster.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -89,6 +89,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
       },
     ]),
     Toaster,
+    FormsModule
   ],
 })
-export class AppModule {}
+export class AppModule { }

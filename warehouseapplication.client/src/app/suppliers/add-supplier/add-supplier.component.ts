@@ -16,9 +16,12 @@ export class AddSupplierComponent {
   newSupplier: Supplier = {
     supplierID: undefined!,
     supplierName: '',
-    supplierAddress: '',
-    supplierCity: '',
-    supplierZipcode: '',
+    address: {
+      street: '',
+      city: '',
+      zipcode: '',
+      country: '',
+    },
   };
   private subscription!: Subscription;
   constructor(
@@ -31,32 +34,40 @@ export class AddSupplierComponent {
         Validators.required,
         Validators.minLength(3),
       ]),
-      supplierAddress: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(60),
-      ]),
-      supplierCity: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-      ]),
-      supplierZipcode: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(60),
-      ]),
+      address: new FormGroup({
+        street: new FormControl('', [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(60),
+        ]),
+        city: new FormControl('', [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(30),
+        ]),
+        zipcode: new FormControl('', [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20),
+        ]),
+        country: new FormControl('', [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(60),
+        ]),
+      }),
     });
   }
 
   onSubmit() {
     this.newSupplier = this.addSupplierForm.value;
-    this.subscription = this.suppliersService
+    console.log(JSON.stringify(this.newSupplier));
+    /*this.subscription = this.suppliersService
       .createSupplier(this.newSupplier)
       .subscribe((data) => {
         this.toast.show('Supplier successfully added', 'bg-success text-light');
         this.router.navigate(['suppliers']);
-      });
+      });*/
   }
 
   ngOnDestroy() {

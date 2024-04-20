@@ -27,9 +27,11 @@ export class EditSupplierComponent {
     this.editSupplierForm = this.formBuilder.group({
       supplierID: undefined,
       supplierName: [Validators.minLength(3)],
-      supplierAddress: [Validators.minLength(3), Validators.maxLength(60)],
-      supplierCity: [Validators.minLength(3), Validators.maxLength(30)],
-      supplierZipcode: [Validators.minLength(3)],
+      address: this.formBuilder.group({
+        street: [Validators.minLength(3), Validators.maxLength(60)],
+        city: [Validators.minLength(3), Validators.maxLength(30)],
+        zipcode: [Validators.minLength(3)]
+      })
     });
   }
 
@@ -42,10 +44,7 @@ export class EditSupplierComponent {
         .subscribe((data: Supplier) => {
           this.supplierDetails = data;
           console.log(
-            this.supplierDetails.supplierName,
-            this.supplierDetails.supplierZipcode,
-            this.supplierDetails.supplierCity,
-            this.supplierDetails.supplierAddress
+            JSON.stringify(this.supplierDetails)
           );
           this.editSupplierForm.patchValue(this.supplierDetails);
           console.log(this.editSupplierForm.value);
@@ -56,6 +55,7 @@ export class EditSupplierComponent {
   onSubmit() {
     if (this.editSupplierForm.valid) {
       const updatedSupplier: Supplier = this.editSupplierForm.value;
+      console.log(JSON.stringify(updatedSupplier));
       this.subscription = this.suppliersService
         .updateSupplier(updatedSupplier, this.ID)
         .subscribe(() => {

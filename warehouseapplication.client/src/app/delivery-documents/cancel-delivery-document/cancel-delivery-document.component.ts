@@ -26,10 +26,11 @@ export class CancelDeliveryDocumentComponent {
     this.documentID = parseInt(
       this.activeRoute.snapshot.paramMap.get('id') || ''
     );
-    this.deliveryDocumentSerivce
+    this.subscription = this.deliveryDocumentSerivce
       .getDeliveryDocumentByID(this.documentID)
       .subscribe((data: DeliveryDocument) => {
         this.deliveryDocumentDetails = data;
+        console.log(JSON.stringify(this.deliveryDocumentDetails));
       });
   }
 

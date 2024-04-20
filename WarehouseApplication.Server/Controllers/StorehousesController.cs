@@ -19,7 +19,13 @@ namespace WarehouseApplication.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Storehouse>>> GetStorehouses()
         {
-            return Ok(await _context.Storehouse.ToListAsync());
+            var storehouses = await _context.Storehouse.Select(s => new
+            {
+                s.StorehouseID,
+                s.StorehouseName,
+                s.StorehouseSymbol,
+            }).ToListAsync();
+            return Ok(storehouses);
         }
     }
 }
